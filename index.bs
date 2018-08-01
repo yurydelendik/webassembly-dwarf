@@ -4,6 +4,7 @@ Editor: Yury Delendik
 Status: FINDING
 Shortname: dwarf-webassembly
 Abstract: This document describes how existing DWARF format can be extended and used with the WebAssembly binaries.
+Markup Shorthands: markdown yes
 </pre>
 <pre class ="biblio">
 {
@@ -26,7 +27,7 @@ Abstract: This document describes how existing DWARF format can be extended and 
 }
 </pre>
 
-# Embedding DWARF data
+# Embedding DWARF data # {#embedding}
 
 The DWARF sections are embedded in the binary WASM files as custom section [[wasm-debugging-capabilities#embeddable-in-wasm|ᴿembeddable-in-wasm]]. The name of the custom section is equal to the DWARF section name as defined in the specification, e.g. `.debug_info` or `.debug_line`. It will allow quickly scan and locate the section's data in a debugger or other tool.
 
@@ -35,11 +36,11 @@ The DWARF format is already compact [[wasm-debugging-capabilities/#compact-in-me
 See the full list of the sections and their relationship at DWARF Format Specification's Appendix B. [[!dwarf-spec]]
 
 
-# Connection with WebAssembly code
+# Relationship with WebAssembly code # {#webassembly-code}
 
 The DWARF information can refer to an instruction pointer or location in memory. In addition to that, special WebAssembly primitives such as locals or globals need to be referenced by other methods.
 
-## Instruction Pointer
+## Instruction Pointer ## {#pc}
 
 The instruction pointer (or PC) is currently defined as bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code and its debug information [[wasm-debugging-capabilities/#code-to-source|ᴿcode-to-source]]. Many sections, such as `.debug_info`, `.debug_line`, etc., can refer to particular instruction by their bytecode offset, and it will be unique.
 
@@ -47,39 +48,38 @@ The `.debug_line` section allows mapping between bytecode offset and original so
 
 The `.debug_info` section contains information about a compile unit, that is comprised of subprogram/functions entries. Individual function entry contains information about its parameters and variables. This information includes their types [[wasm-debugging-capabilities/#type-of-binding|ᴿtype-of-binding]], the bindings in scopes at a certain location [[wasm-debugging-capabilities/#bindings-within-a-scope|ᴿbindings-within-a-scope]] and how to calculate a variable value using DWARF expression [[wasm-debugging-capabilities/#reconstruct-a-bindings-value|ᴿreconstruct-a-bindings-value]].
 
-The inlined function is expressed inside the `.debug_info` function entries [[wasm-debugging-capabilities/#inlined-functions
-|ᴿinlined-functions]] and also contain a proper mapping in the `.debug_line` section.
+The inlined function is expressed inside the `.debug_info` function entries [[wasm-debugging-capabilities/#inlined-functions|ᴿinlined-functions]] and also contain a proper mapping in the `.debug_line` section.
 
 
-## Memory Address
+## Memory Address ## {#memory-address}
 
 The location in memory, e.g. expressions that point to static variables defined on a heap, has the same definition as in traditional architectures.
 
 
-## DWARF Expressions
+## DWARF Expressions ## {#dwarf-expressions}
 
 WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between `DW_OP_lo_user` and `DW_OP_hi_user` (see 7.1 Vendor Extensibility, [[!dwarf-spec]]).
 
 The above extension will allow reading values of locals or globals [[wasm-debugging-capabilities/#reconstruct-a-bindings-value|ᴿreconstruct-a-bindings-value]]. Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into `.debug_info` section.
 
-### Proposed DWARF expression extension for locals
+### Proposed DWARF expression extension for locals ### {#dwarf-locals}
 
 The `DW_OP_WASM_location` with code `0xFC` can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.
 
 Pilot work can be found at https://gist.github.com/yurydelendik/3242da58878ceb96ba778cf3f26d7c9a
 
 
-# Types information
+# Types information # {#types}
 
 The [[!dwarf-spec]] has the ability to store types information, e.g. in the `.debug_pubtypes` or `.debug_info` sections, that can be used by a debugger to display or pretty print more complex values [[wasm-debugging-capabilities/#types|ᴿtypes]]. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.
 
 
-# Usage by tools
+# Usage by tools # {#tools}
 
 Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see [[!wasm-linking]]) may assist with changing the structure of the code or data section, e.g. in case if some function where removed [[wasm-debugging-capabilities/#fast-to-manipulate|ᴿfast-to-manipulate]]. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.
 
 
-# Conversion to source maps
+# Conversion to source maps # {#source-maps}
 
 The wasm source maps [[!source-maps]] can be generated based on the .debug_line section information [[wasm-debugging-capabilities/#locations|ᴿlocations]]. The `.debug_line` sections, when decoded, allows producing the mappings of wasm file bytecode offsets to the original source locations.
 
