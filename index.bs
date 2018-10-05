@@ -25,8 +25,8 @@ Markup Shorthands: markdown yes
     "title": "WebAssembly Debugging Capabilities"
   },
   "llvm-dbg-value-pilot": {
-    "href": "https://gist.github.com/yurydelendik/3242da58878ceb96ba778cf3f26d7c9a",
-    "title": "Attept to extend DBG_VALUE functionality pilot"
+    "href": "https://reviews.llvm.org/D52634",
+    "title": "Add DBG_VALUE with local operands location in WebAssemblyExplicitLocals pass"
   },
   "x-scopes-pilot": {
     "href": "https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159",
