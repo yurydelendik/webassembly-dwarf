@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="fc337ed8a52d55c357055c3a18d9cda094eea2bd" name="document-revision">
+  <meta content="3edcd76d57cdd2a56175313d0a8ba042ec03ae32" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1447,7 +1447,7 @@ Parts of this work may be from another specification document.  If so, those par
    <p>WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between <code>DW_OP_lo_user</code> and <code>DW_OP_hi_user</code> (see 7.1 Vendor Extensibility, <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a>).</p>
    <p>The above extension will allow reading values of locals or globals <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a> (see <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a> above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into <code>.debug_info</code> section.</p>
    <h4 class="heading settled" data-level="2.3.1" id="dwarf-locals"><span class="secno">2.3.1. </span><span class="content">Proposed DWARF expression extension for locals</span><a class="self-link" href="#dwarf-locals"></a></h4>
-   <p>The <code>DW_OP_WASM_location</code> with code <code>0xFC</code> can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.</p>
+   <p>The <code>DW_OP_WASM_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.</p>
    <p class="note" role="note"><span>Note:</span> The pilot work can be found at <a data-link-type="biblio" href="#biblio-llvm-dbg-value-pilot">[llvm-dbg-value-pilot]</a>.</p>
    <h2 class="heading settled" data-level="3" id="types"><span class="secno">3. </span><span class="content">Types information</span><a class="self-link" href="#types"></a></h2>
    <p>The <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a> has the ability to store types information, e.g. in the <code>.debug_pubtypes</code> or <code>.debug_info</code> sections, that can be used by a debugger to display or pretty print more complex values <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#types">ᴿtypes</a>. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.</p>

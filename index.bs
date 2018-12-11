@@ -81,7 +81,7 @@ The above extension will allow reading values of locals or globals [[wasm-debugg
 
 ### Proposed DWARF expression extension for locals ### {#dwarf-locals}
 
-The `DW_OP_WASM_location` with code `0xFC` can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.
+The `DW_OP_WASM_location` with code `0xED` can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.
 
 Note: The pilot work can be found at [[llvm-dbg-value-pilot]].
 
