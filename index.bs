@@ -50,7 +50,7 @@ The DWARF information can refer to an instruction pointer or location in memory.
 
 ## Instruction Pointer ## {#pc}
 
-The instruction pointer (or PC) is currently defined as WebAssebly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information [[wasm-debugging-capabilities/#code-to-source|ᴿcode-to-source]]. Many sections, such as `.debug_info`, `.debug_line`, etc., refer to a particular instruction by their bytecode offset, and it will be unique.
+The instruction pointer (or PC) is currently defined as WebAssembly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information [[wasm-debugging-capabilities/#code-to-source|ᴿcode-to-source]]. Many sections, such as `.debug_info`, `.debug_line`, etc., refer to a particular instruction by their bytecode offset, and it will be unique.
 
 ### .debug_line section ### {#debug_line}
 

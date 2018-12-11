@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="f1f7ab486c7b262a933ba69f3c6f35d035308c63" name="document-revision">
+  <meta content="fc337ed8a52d55c357055c3a18d9cda094eea2bd" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1365,7 +1365,7 @@ pre .property::before, pre .property::after {
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly Target</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-10-05">5 October 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-12-11">11 December 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1377,7 +1377,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 5 October 2018,
+In addition, as of 11 December 2018,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1432,7 +1432,7 @@ Parts of this work may be from another specification document.  If so, those par
    <h2 class="heading settled" data-level="2" id="webassembly-code"><span class="secno">2. </span><span class="content">Relationship with WebAssembly code</span><a class="self-link" href="#webassembly-code"></a></h2>
    <p>The DWARF information can refer to an instruction pointer or location in memory. In addition to that, special WebAssembly primitives such as locals or globals need to be referenced.</p>
    <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Instruction Pointer</span><a class="self-link" href="#pc"></a></h3>
-   <p>The instruction pointer (or PC) is currently defined as WebAssebly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#code-to-source">ᴿcode-to-source</a>. Many sections, such as <code>.debug_info</code>, <code>.debug_line</code>, etc., refer to a particular instruction by their bytecode offset, and it will be unique.</p>
+   <p>The instruction pointer (or PC) is currently defined as WebAssembly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#code-to-source">ᴿcode-to-source</a>. Many sections, such as <code>.debug_info</code>, <code>.debug_line</code>, etc., refer to a particular instruction by their bytecode offset, and it will be unique.</p>
    <h4 class="heading settled" data-level="2.1.1" id="debug_line"><span class="secno">2.1.1. </span><span class="content">.debug_line section</span><a class="self-link" href="#debug_line"></a></h4>
    <p>The <code>.debug_line</code> section allows mapping between bytecode offset and original source. The relationship between these location types is many-to-one: multiple bytecode offsets may correspond a single original source location <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#enumerate-location-mappings">ᴿenumerate-location-mappings</a>.</p>
    <p>This information is complete to produce wasm source map file <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a>.</p>
