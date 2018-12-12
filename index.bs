@@ -52,6 +52,8 @@ The DWARF information can refer to an instruction pointer or location in memory.
 
 The instruction pointer (or PC) is currently defined as WebAssembly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information [[wasm-debugging-capabilities/#code-to-source|ᴿcode-to-source]]. Many sections, such as `.debug_info`, `.debug_line`, etc., refer to a particular instruction by their bytecode offset, and it will be unique.
 
+It is also trivial to map WebAssembly bytecode offset to the derived native PC, e.g. during AOT or JIT compilation, for a use in a native debugger. 
+
 ### .debug_line section ### {#debug_line}
 
 The `.debug_line` section allows mapping between bytecode offset and original source. The relationship between these location types is many-to-one: multiple bytecode offsets may correspond a single original source location [[wasm-debugging-capabilities/#enumerate-location-mappings|ᴿenumerate-location-mappings]].
@@ -79,11 +81,35 @@ WebAssembly does not have registers, which DWARF expressions normally use to cal
 
 The above extension will allow reading values of locals or globals [[wasm-debugging-capabilities/#reconstruct-a-bindings-value|ᴿreconstruct-a-bindings-value]] (see [[#debug_info_stucture]] above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into `.debug_info` section.
 
+This extension allows separating logically incompatible native platform concepts of registers/memory and WebAssembly specific elements. When DWARF information needed to be transformed for use in the native debugger, e.g. as JIT'ed code, the `DW_OP_WASM_location` extension can be easily replaced with native registers or memory location expression. There is no real advantage to overcomplicate logic of producers and consumers of the DWARF information with artificial mapping scheme that express WebAssembly specific location as CPU registers.
+
 ### Proposed DWARF expression extension for locals ### {#dwarf-locals}
 
-The `DW_OP_WASM_location` with code `0xED` can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.
+The `DW_OP_WASM_location` with code `0xED` can be added to the DWARF expression language. This operation will have two operands.
 
-Note: The pilot work can be found at [[llvm-dbg-value-pilot]].
+The first operand defines the type of the WebAssembly location. It is encoded as ULEB128 constant.
+
+The second operand is a location item index and it is encoded as ULEB128 constant.
+
+<table class=index>
+  <caption>WebAssembly Location</caption>
+  <thead>
+    <tr>
+      <th>Type</th><th>Description</th><th>Second Parameter</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td><td>Local or Argument</td><td>The index of a WebAssembly function  local/parameter</td>
+    </tr>
+    <tr>
+      <td>2</td><td>Global</td><td>The index of a WebAssembly module global</td>
+    </tr>
+    <tr>
+      <td>3</td><td>Operand Stack Item</td><td>The depth of the item (0 - points the bottom of the stack)</td>
+    </tr>
+  </tbody>
+</table>
 
 
 # Types information # {#types}
@@ -96,8 +122,11 @@ See also [[#debug_info_stucture]].
 
 Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see [[!wasm-linking]]) may assist with changing the structure of the code or data section, e.g. in case if some function where removed [[wasm-debugging-capabilities/#fast-to-manipulate|ᴿfast-to-manipulate]]. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.
 
+The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.
 
-# Conversion to source maps # {#source-maps}
+## Conversion to source maps ## {#source-maps}
+
+At this moment web browsers can use source map to map generated code to original sources. The source maps where created for JavaScript usage, however it is possible to use these for the WebAssembly modules.
 
 The wasm source maps [[!source-maps]] can be generated based on the .debug_line section information [[wasm-debugging-capabilities/#locations|ᴿlocations]]. The `.debug_line` sections, when decoded, allows producing the mappings of wasm file bytecode offsets to the original source locations.
 
@@ -106,3 +135,24 @@ The source file names can be specified in the relative or absolute form. The web
 The DWARF sections can be discarded [[wasm-debugging-capabilities/#separable-from-wasm|ᴿseparable-from-wasm]].
 
 Note: It is possible to translate entire DWARF information -- there is a pilot at [[x-scopes-pilot]]. That allows debugger vendors to experiment and verify if all needed information is present.
+
+## Use in WebAssembly debuggers ## {#wasm-debugger}
+
+The following functionality is expected to be implemented in a specialized WebAssembly debugger:
+
+- Read and parse DWARF data
+- Evaluate extended DWARF expressions to locate data
+- Use type info during formatting of data values
+
+
+## Use in AOT or JIT compilers ## {#aot-jit}
+
+It is not trivial to adapt native debuggers to support the WebAssembly target. Though native debuggers have a good support for DWARF.
+
+The following functionality is expected to be performed by WebAssembly to native code compilers:
+
+- Read and parser WebAssembly DWARF data
+- Transform during compilation:
+  * WebAssembly bytecode offsets to native code instruction addresses
+  * Translate extended DWARF expressions into DWARF expression operands that use native registers and memory
+- Serialize and package transformed DWARF data along with the compiled code

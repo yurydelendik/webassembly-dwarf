@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="3edcd76d57cdd2a56175313d0a8ba042ec03ae32" name="document-revision">
+  <meta content="f51b613e36ba9bcf394e6f1c4427e76e12bc834f" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1365,7 +1365,7 @@ pre .property::before, pre .property::after {
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly Target</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-12-11">11 December 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-12-12">12 December 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1377,7 +1377,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 11 December 2018,
+In addition, as of 12 December 2018,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1413,8 +1413,13 @@ Parts of this work may be from another specification document.  If so, those par
        </ol>
      </ol>
     <li><a href="#types"><span class="secno">3</span> <span class="content">Types information</span></a>
-    <li><a href="#tools"><span class="secno">4</span> <span class="content">Usage by tools</span></a>
-    <li><a href="#source-maps"><span class="secno">5</span> <span class="content">Conversion to source maps</span></a>
+    <li>
+     <a href="#tools"><span class="secno">4</span> <span class="content">Usage by tools</span></a>
+     <ol class="toc">
+      <li><a href="#source-maps"><span class="secno">4.1</span> <span class="content">Conversion to source maps</span></a>
+      <li><a href="#wasm-debugger"><span class="secno">4.2</span> <span class="content">Use in WebAssembly debuggers</span></a>
+      <li><a href="#aot-jit"><span class="secno">4.3</span> <span class="content">Use in AOT or JIT compilers</span></a>
+     </ol>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
@@ -1433,6 +1438,7 @@ Parts of this work may be from another specification document.  If so, those par
    <p>The DWARF information can refer to an instruction pointer or location in memory. In addition to that, special WebAssembly primitives such as locals or globals need to be referenced.</p>
    <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Instruction Pointer</span><a class="self-link" href="#pc"></a></h3>
    <p>The instruction pointer (or PC) is currently defined as WebAssembly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#code-to-source">ᴿcode-to-source</a>. Many sections, such as <code>.debug_info</code>, <code>.debug_line</code>, etc., refer to a particular instruction by their bytecode offset, and it will be unique.</p>
+   <p>It is also trivial to map WebAssembly bytecode offset to the derived native PC, e.g. during AOT or JIT compilation, for a use in a native debugger.</p>
    <h4 class="heading settled" data-level="2.1.1" id="debug_line"><span class="secno">2.1.1. </span><span class="content">.debug_line section</span><a class="self-link" href="#debug_line"></a></h4>
    <p>The <code>.debug_line</code> section allows mapping between bytecode offset and original source. The relationship between these location types is many-to-one: multiple bytecode offsets may correspond a single original source location <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#enumerate-location-mappings">ᴿenumerate-location-mappings</a>.</p>
    <p>This information is complete to produce wasm source map file <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a>.</p>
@@ -1446,19 +1452,69 @@ Parts of this work may be from another specification document.  If so, those par
    <h3 class="heading settled" data-level="2.3" id="dwarf-expressions"><span class="secno">2.3. </span><span class="content">DWARF Expressions</span><a class="self-link" href="#dwarf-expressions"></a></h3>
    <p>WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between <code>DW_OP_lo_user</code> and <code>DW_OP_hi_user</code> (see 7.1 Vendor Extensibility, <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a>).</p>
    <p>The above extension will allow reading values of locals or globals <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a> (see <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a> above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into <code>.debug_info</code> section.</p>
+   <p>This extension allows separating logically incompatible native platform concepts of registers/memory and WebAssembly specific elements. When DWARF information needed to be transformed for use in the native debugger, e.g. as JIT’ed code, the <code>DW_OP_WASM_location</code> extension can be easily replaced with native registers or memory location expression. There is no real advantage to overcomplicate logic of producers and consumers of the DWARF information with artificial mapping scheme that express WebAssembly specific location as CPU registers.</p>
    <h4 class="heading settled" data-level="2.3.1" id="dwarf-locals"><span class="secno">2.3.1. </span><span class="content">Proposed DWARF expression extension for locals</span><a class="self-link" href="#dwarf-locals"></a></h4>
-   <p>The <code>DW_OP_WASM_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two arguments. The first one is a type of the location: 1 - locals, 2 - globals, 3 - operands stack. The second one is an index.</p>
-   <p class="note" role="note"><span>Note:</span> The pilot work can be found at <a data-link-type="biblio" href="#biblio-llvm-dbg-value-pilot">[llvm-dbg-value-pilot]</a>.</p>
+   <p>The <code>DW_OP_WASM_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two operands.</p>
+   <p>The first operand defines the type of the WebAssembly location. It is encoded as ULEB128 constant.</p>
+   <p>The second operand is a location item index and it is encoded as ULEB128 constant.</p>
+   <table class="index">
+    <caption>WebAssembly Location</caption>
+    <thead>
+     <tr>
+      <th>Type
+      <th>Description
+      <th>Second Parameter
+    <tbody>
+     <tr>
+      <td>1
+      <td>Local or Argument
+      <td>The index of a WebAssembly function  local/parameter
+     <tr>
+      <td>2
+      <td>Global
+      <td>The index of a WebAssembly module global
+     <tr>
+      <td>3
+      <td>Operand Stack Item
+      <td>The depth of the item (0 - points the bottom of the stack)
+   </table>
    <h2 class="heading settled" data-level="3" id="types"><span class="secno">3. </span><span class="content">Types information</span><a class="self-link" href="#types"></a></h2>
    <p>The <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a> has the ability to store types information, e.g. in the <code>.debug_pubtypes</code> or <code>.debug_info</code> sections, that can be used by a debugger to display or pretty print more complex values <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#types">ᴿtypes</a>. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.</p>
    <p>See also <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a>.</p>
    <h2 class="heading settled" data-level="4" id="tools"><span class="secno">4. </span><span class="content">Usage by tools</span><a class="self-link" href="#tools"></a></h2>
    <p>Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see <a data-link-type="biblio" href="#biblio-wasm-linking">[wasm-linking]</a>) may assist with changing the structure of the code or data section, e.g. in case if some function where removed <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#fast-to-manipulate">ᴿfast-to-manipulate</a>. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.</p>
-   <h2 class="heading settled" data-level="5" id="source-maps"><span class="secno">5. </span><span class="content">Conversion to source maps</span><a class="self-link" href="#source-maps"></a></h2>
+   <p>The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.</p>
+   <h3 class="heading settled" data-level="4.1" id="source-maps"><span class="secno">4.1. </span><span class="content">Conversion to source maps</span><a class="self-link" href="#source-maps"></a></h3>
+   <p>At this moment web browsers can use source map to map generated code to original sources. The source maps where created for JavaScript usage, however it is possible to use these for the WebAssembly modules.</p>
    <p>The wasm source maps <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a> can be generated based on the .debug_line section information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#locations">ᴿlocations</a>. The <code>.debug_line</code> sections, when decoded, allows producing the mappings of wasm file bytecode offsets to the original source locations.</p>
    <p>The source file names can be specified in the relative or absolute form. The web platform solutions prefer original sources be provided as text embedded into source maps or published relative to the source map file.</p>
    <p>The DWARF sections can be discarded <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#separable-from-wasm">ᴿseparable-from-wasm</a>.</p>
    <p class="note" role="note"><span>Note:</span> It is possible to translate entire DWARF information -- there is a pilot at <a data-link-type="biblio" href="#biblio-x-scopes-pilot">[x-scopes-pilot]</a>. That allows debugger vendors to experiment and verify if all needed information is present.</p>
+   <h3 class="heading settled" data-level="4.2" id="wasm-debugger"><span class="secno">4.2. </span><span class="content">Use in WebAssembly debuggers</span><a class="self-link" href="#wasm-debugger"></a></h3>
+   <p>The following functionality is expected to be implemented in a specialized WebAssembly debugger:</p>
+   <ul>
+    <li data-md="">
+     <p>Read and parse DWARF data</p>
+    <li data-md="">
+     <p>Evaluate extended DWARF expressions to locate data</p>
+    <li data-md="">
+     <p>Use type info during formatting of data values</p>
+   </ul>
+   <h3 class="heading settled" data-level="4.3" id="aot-jit"><span class="secno">4.3. </span><span class="content">Use in AOT or JIT compilers</span><a class="self-link" href="#aot-jit"></a></h3>
+   <p>It is not trivial to adapt native debuggers to support the WebAssembly target. Though native debuggers have a good support for DWARF.</p>
+   <p>The following functionality is expected to be performed by WebAssembly to native code compilers:</p>
+   <ul>
+    <li data-md="">
+     <p>Read and parser WebAssembly DWARF data</p>
+    <li data-md="">
+     <p>Transform during compilation:</p>
+    <li data-md="">
+     <p>WebAssembly bytecode offsets to native code instruction addresses</p>
+    <li data-md="">
+     <p>Translate extended DWARF expressions into DWARF expression operands that use native registers and memory</p>
+    <li data-md="">
+     <p>Serialize and package transformed DWARF data along with the compiled code</p>
+   </ul>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -1620,8 +1676,6 @@ Parts of this work may be from another specification document.  If so, those par
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
-   <dt id="biblio-llvm-dbg-value-pilot">[LLVM-DBG-VALUE-PILOT]
-   <dd><a href="https://reviews.llvm.org/D52634">Add DBG_VALUE with local operands location in WebAssemblyExplicitLocals pass</a>. URL: <a href="https://reviews.llvm.org/D52634">https://reviews.llvm.org/D52634</a>
    <dt id="biblio-x-scopes-pilot">[X-SCOPES-PILOT]
    <dd><a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">Experimental `x-scopes` source maps extension</a>. URL: <a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159</a>
   </dl>
