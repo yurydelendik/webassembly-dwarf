@@ -31,6 +31,10 @@ Markup Shorthands: markdown yes
   "x-scopes-pilot": {
     "href": "https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159",
     "title": "Experimental `x-scopes` source maps extension"
+  },
+  "wasm-dwarf-flow": {
+    "href": "https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/",
+    "title": "WebAssembly DWARF information flow overview"
   }
 }
 </pre>
@@ -124,6 +128,8 @@ Tools, other than a debugger, can consume and mutate the DWARF section informati
 
 The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.
 
+See also [[wasm-dwarf-flow]].
+
 ## Conversion to source maps ## {#source-maps}
 
 At this moment web browsers can use source map to map generated code to original sources. The source maps where created for JavaScript usage, however it is possible to use these for the WebAssembly modules.
@@ -153,6 +159,6 @@ The following functionality is expected to be performed by WebAssembly to native
 
 - Read and parser WebAssembly DWARF data
 - Transform during compilation:
-  * WebAssembly bytecode offsets to native code instruction addresses
-  * Translate extended DWARF expressions into DWARF expression operands that use native registers and memory
+    * WebAssembly bytecode offsets to native code instruction addresses
+    * Translate extended DWARF expressions into DWARF expression operands that use native registers and memory
 - Serialize and package transformed DWARF data along with the compiled code

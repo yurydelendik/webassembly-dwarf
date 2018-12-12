@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="f51b613e36ba9bcf394e6f1c4427e76e12bc834f" name="document-revision">
+  <meta content="871ce52d422e7f316df8a3fd0a42ca89c2e030c9" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1484,6 +1484,7 @@ Parts of this work may be from another specification document.  If so, those par
    <h2 class="heading settled" data-level="4" id="tools"><span class="secno">4. </span><span class="content">Usage by tools</span><a class="self-link" href="#tools"></a></h2>
    <p>Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see <a data-link-type="biblio" href="#biblio-wasm-linking">[wasm-linking]</a>) may assist with changing the structure of the code or data section, e.g. in case if some function where removed <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#fast-to-manipulate">ᴿfast-to-manipulate</a>. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.</p>
    <p>The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.</p>
+   <p>See also <a data-link-type="biblio" href="#biblio-wasm-dwarf-flow">[wasm-dwarf-flow]</a>.</p>
    <h3 class="heading settled" data-level="4.1" id="source-maps"><span class="secno">4.1. </span><span class="content">Conversion to source maps</span><a class="self-link" href="#source-maps"></a></h3>
    <p>At this moment web browsers can use source map to map generated code to original sources. The source maps where created for JavaScript usage, however it is possible to use these for the WebAssembly modules.</p>
    <p>The wasm source maps <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a> can be generated based on the .debug_line section information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#locations">ᴿlocations</a>. The <code>.debug_line</code> sections, when decoded, allows producing the mappings of wasm file bytecode offsets to the original source locations.</p>
@@ -1508,10 +1509,12 @@ Parts of this work may be from another specification document.  If so, those par
      <p>Read and parser WebAssembly DWARF data</p>
     <li data-md="">
      <p>Transform during compilation:</p>
-    <li data-md="">
-     <p>WebAssembly bytecode offsets to native code instruction addresses</p>
-    <li data-md="">
-     <p>Translate extended DWARF expressions into DWARF expression operands that use native registers and memory</p>
+     <ul>
+      <li data-md="">
+       <p>WebAssembly bytecode offsets to native code instruction addresses</p>
+      <li data-md="">
+       <p>Translate extended DWARF expressions into DWARF expression operands that use native registers and memory</p>
+     </ul>
     <li data-md="">
      <p>Serialize and package transformed DWARF data along with the compiled code</p>
    </ul>
@@ -1676,6 +1679,8 @@ Parts of this work may be from another specification document.  If so, those par
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
+   <dt id="biblio-wasm-dwarf-flow">[WASM-DWARF-FLOW]
+   <dd><a href="https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/">WebAssembly DWARF information flow overview</a>. URL: <a href="https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/">https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/</a>
    <dt id="biblio-x-scopes-pilot">[X-SCOPES-PILOT]
    <dd><a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">Experimental `x-scopes` source maps extension</a>. URL: <a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159</a>
   </dl>
