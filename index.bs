@@ -9,8 +9,8 @@ Markup Shorthands: markdown yes
 <pre class ="biblio">
 {
   "dwarf-spec": {
-    "href": "http://www.dwarfstd.org/doc/DWARF4.pdf",
-    "title": "DWARF Debugging Information Format. Version 4"
+    "href": "http://www.dwarfstd.org/doc/DWARF5.pdf",
+    "title": "DWARF Debugging Information Format. Version 5"
   },
   "source-maps": {
     "href": "https://github.com/WebAssembly/design/pull/1051",
