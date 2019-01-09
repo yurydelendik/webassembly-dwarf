@@ -992,93 +992,57 @@ Possible extra rowspan handling
 	.toc > li li          { font-weight: normal; }
 	.toc > li li li       { font-size:   95%;    }
 	.toc > li li li li    { font-size:   90%;    }
-	.toc > li li li li .secno { font-size: 85%; }
 	.toc > li li li li li { font-size:   85%;    }
-	.toc > li li li li li .secno { font-size: 100%; }
 
-	/* @supports not (display:grid) { */
-		.toc > li             { margin: 1.5rem 0;    }
-		.toc > li li          { margin: 0.3rem 0;    }
-		.toc > li li li       { margin-left: 2rem;   }
+	.toc > li             { margin: 1.5rem 0;    }
+	.toc > li li          { margin: 0.3rem 0;    }
+	.toc > li li li       { margin-left: 2rem;   }
 
-		/* Section numbers in a column of their own */
-		.toc .secno {
-			float: left;
-			width: 4rem;
-			white-space: nowrap;
-		}
+	/* Section numbers in a column of their own */
+	.toc .secno {
+		float: left;
+		width: 4rem;
+		white-space: nowrap;
+	}
+	.toc > li li li li .secno {
+		font-size: 85%;
+	}
+	.toc > li li li li li .secno {
+		font-size: 100%;
+	}
 
-		.toc li {
-			clear: both;
-		}
+	:not(li) > .toc              { margin-left:  5rem; }
+	.toc .secno                  { margin-left: -5rem; }
+	.toc > li li li .secno       { margin-left: -7rem; }
+	.toc > li li li li .secno    { margin-left: -9rem; }
+	.toc > li li li li li .secno { margin-left: -11rem; }
 
-		:not(li) > .toc              { margin-left:  5rem; }
-		.toc .secno                  { margin-left: -5rem; }
-		.toc > li li li .secno       { margin-left: -7rem; }
-		.toc > li li li li .secno    { margin-left: -9rem; }
-		.toc > li li li li li .secno { margin-left: -11rem; }
+	/* Tighten up indentation in narrow ToCs */
+	@media (max-width: 30em) {
+		:not(li) > .toc              { margin-left:  4rem; }
+		.toc .secno                  { margin-left: -4rem; }
+		.toc > li li li              { margin-left:  1rem; }
+		.toc > li li li .secno       { margin-left: -5rem; }
+		.toc > li li li li .secno    { margin-left: -6rem; }
+		.toc > li li li li li .secno { margin-left: -7rem; }
+	}
+	@media screen and (min-width: 78em) {
+		body:not(.toc-inline) :not(li) > .toc              { margin-left:  4rem; }
+		body:not(.toc-inline) .toc .secno                  { margin-left: -4rem; }
+		body:not(.toc-inline) .toc > li li li              { margin-left:  1rem; }
+		body:not(.toc-inline) .toc > li li li .secno       { margin-left: -5rem; }
+		body:not(.toc-inline) .toc > li li li li .secno    { margin-left: -6rem; }
+		body:not(.toc-inline) .toc > li li li li li .secno { margin-left: -7rem; }
+	}
+	body.toc-sidebar #toc :not(li) > .toc              { margin-left:  4rem; }
+	body.toc-sidebar #toc .toc .secno                  { margin-left: -4rem; }
+	body.toc-sidebar #toc .toc > li li li              { margin-left:  1rem; }
+	body.toc-sidebar #toc .toc > li li li .secno       { margin-left: -5rem; }
+	body.toc-sidebar #toc .toc > li li li li .secno    { margin-left: -6rem; }
+	body.toc-sidebar #toc .toc > li li li li li .secno { margin-left: -7rem; }
 
-		/* Tighten up indentation in narrow ToCs */
-		@media (max-width: 30em) {
-			:not(li) > .toc              { margin-left:  4rem; }
-			.toc .secno                  { margin-left: -4rem; }
-			.toc > li li li              { margin-left:  1rem; }
-			.toc > li li li .secno       { margin-left: -5rem; }
-			.toc > li li li li .secno    { margin-left: -6rem; }
-			.toc > li li li li li .secno { margin-left: -7rem; }
-		}
-	/* } */
-
-	@supports (display:grid) {
-		/* Use #toc over .toc to override non-@supports rules. */
-		#toc {
-			display: grid;
-			align-content: start;
-			grid-template-columns: auto 1fr;
-			grid-column-gap: 1rem;
-			column-gap: 1rem;
-			grid-row-gap: .6rem;
-			row-gap: .6rem;
-		}
-		#toc h2 {
-			grid-column: 1 / -1;
-			margin-bottom: 0;
-		}
-		#toc ol,
-		#toc li,
-		#toc a {
-			display: contents;
-			/* Switch <a> to subgrid when supported */
-		}
-		#toc span {
-			margin: 0;
-		}
-		#toc > .toc > li > a > span {
-			/* The spans of the top-level list,
-			   comprising the first items of each top-level section. */
-			margin-top: 1.1rem;
-		}
-		#toc#toc .secno { /* Ugh, need more specificity to override base.css */
-			grid-column: 1;
-			width: auto;
-			margin-left: 0;
-		}
-		#toc .content {
-			grid-column: 2;
-			width: auto;
-			margin-right: 1rem;
-		}
-		#toc .content:hover {
-			background: rgba(75%, 75%, 75%, .25);
-			border-bottom: 3px solid #054572;
-			margin-bottom: -3px;
-		}
-		#toc li li li .content {
-			margin-left: 1rem;
-		}
-		#toc li li li li .content {
-			margin-left: 2rem;
-		}
+	.toc li {
+		clear: both;
 	}
 
 
@@ -1212,8 +1176,8 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="2d94e96374a658d404514c8533f5cd2feb87f171" name="document-revision">
+  <meta content="Bikeshed version 150b038a54cb926cf8e3d36fd8b108c226cb94b8" name="generator">
+  <meta content="2449bbb0247caa7b61247accbfaf6f754821ec05" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1365,11 +1329,9 @@ pre .property::before, pre .property::after {
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly Target</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-12-13">13 December 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2019-01-09">9 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
-     <dt>Issue Tracking:
-     <dd><a href="https://github.com/yurydelendik/webassembly-dwarf/issues/">GitHub</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><span class="p-name fn">Yury Delendik</span>
     </dl>
@@ -1377,7 +1339,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 13 December 2018,
+In addition, as of 9 January 2019,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1431,8 +1393,8 @@ Parts of this work may be from another specification document.  If so, those par
   </nav>
   <main>
    <h2 class="heading settled" data-level="1" id="embedding"><span class="secno">1. </span><span class="content">Embedding DWARF data</span><a class="self-link" href="#embedding"></a></h2>
-   <p>The DWARF sections are embedded in the binary WASM files as custom section <a href="https://fitzgen.github.io/wasm-debugging-capabilities#embeddable-in-wasm">ᴿembeddable-in-wasm</a>. The name of the custom section is equal to the DWARF section name as defined in the specification, e.g. <code>.debug_info</code> or <code>.debug_line</code>. It will allow quickly scan and locate the section’s data in a debugger or other tool.</p>
-   <p>The DWARF format is already compact <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-in-memory">ᴿcompact-in-memory</a>. Furthermore, it is possible to remove DWARF sections from the production binary WASM file and place them into a separate container without modifications <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-on-disk">ᴿcompact-on-disk</a>.</p>
+   <p>The DWARF sections are embedded in the binary Wasm files as custom section <a href="https://fitzgen.github.io/wasm-debugging-capabilities#embeddable-in-wasm">ᴿembeddable-in-wasm</a>. The name of the custom section is equal to the DWARF section name as defined in the specification, e.g. <code>.debug_info</code> or <code>.debug_line</code>. It will allow quickly scan and locate the section’s data in a debugger or other tool.</p>
+   <p>The DWARF format is already compact <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-in-memory">ᴿcompact-in-memory</a>. Furthermore, it is possible to remove DWARF sections from the production binary Wasm file and place them into a separate container without modifications <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-on-disk">ᴿcompact-on-disk</a>.</p>
    <p>See the full list of the sections and their relationship at DWARF Format Specification’s Appendix B. <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a></p>
    <h2 class="heading settled" data-level="2" id="webassembly-code"><span class="secno">2. </span><span class="content">Relationship with WebAssembly code</span><a class="self-link" href="#webassembly-code"></a></h2>
    <p>The DWARF information can refer to an instruction pointer or location in memory. In addition to that, special WebAssembly primitives such as locals or globals need to be referenced.</p>
@@ -1452,9 +1414,9 @@ Parts of this work may be from another specification document.  If so, those par
    <h3 class="heading settled" data-level="2.3" id="dwarf-expressions"><span class="secno">2.3. </span><span class="content">DWARF Expressions</span><a class="self-link" href="#dwarf-expressions"></a></h3>
    <p>WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between <code>DW_OP_lo_user</code> and <code>DW_OP_hi_user</code> (see 7.1 Vendor Extensibility, <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a>).</p>
    <p>The above extension will allow reading values of locals or globals <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a> (see <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a> above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into <code>.debug_info</code> section.</p>
-   <p>This extension allows separating logically incompatible native platform concepts of registers/memory and WebAssembly specific elements. When DWARF information needed to be transformed for use in the native debugger, e.g. as JIT’ed code, the <code>DW_OP_WASM_location</code> extension can be easily replaced with native registers or memory location expression. There is no real advantage to overcomplicate logic of producers and consumers of the DWARF information with artificial mapping scheme that express WebAssembly specific location as CPU registers.</p>
+   <p>This extension allows separating logically incompatible native platform concepts of registers/memory and WebAssembly specific elements. When DWARF information needed to be transformed for use in the native debugger, e.g. as JIT’ed code, the <code>DW_OP_Wasm_location</code> extension can be easily replaced with native registers or memory location expression. There is no real advantage to overcomplicate logic of producers and consumers of the DWARF information with artificial mapping scheme that express WebAssembly specific location as CPU registers.</p>
    <h4 class="heading settled" data-level="2.3.1" id="dwarf-locals"><span class="secno">2.3.1. </span><span class="content">Proposed DWARF expression extension for locals</span><a class="self-link" href="#dwarf-locals"></a></h4>
-   <p>The <code>DW_OP_WASM_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two operands.</p>
+   <p>The <code>DW_OP_Wasm_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two operands.</p>
    <p>The first operand defines the type of the WebAssembly location. It is encoded as ULEB128 constant.</p>
    <p>The second operand is a location item index and it is encoded as ULEB128 constant.</p>
    <table class="index">
@@ -1482,7 +1444,7 @@ Parts of this work may be from another specification document.  If so, those par
    <p>The <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a> has the ability to store types information, e.g. in the <code>.debug_pubtypes</code> or <code>.debug_info</code> sections, that can be used by a debugger to display or pretty print more complex values <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#types">ᴿtypes</a>. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.</p>
    <p>See also <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a>.</p>
    <h2 class="heading settled" data-level="4" id="tools"><span class="secno">4. </span><span class="content">Usage by tools</span><a class="self-link" href="#tools"></a></h2>
-   <p>Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see <a data-link-type="biblio" href="#biblio-wasm-linking">[wasm-linking]</a>) may assist with changing the structure of the code or data section, e.g. in case if some function where removed <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#fast-to-manipulate">ᴿfast-to-manipulate</a>. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.</p>
+   <p>Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with Wasm binary file. The relocation sections (see <a data-link-type="biblio" href="#biblio-wasm-linking">[wasm-linking]</a>) may assist with changing the structure of the code or data section, e.g. in case if some function where removed <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#fast-to-manipulate">ᴿfast-to-manipulate</a>. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.</p>
    <p>The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.</p>
    <p>See also <a data-link-type="biblio" href="#biblio-wasm-dwarf-flow">[wasm-dwarf-flow]</a>.</p>
    <h3 class="heading settled" data-level="4.1" id="source-maps"><span class="secno">4.1. </span><span class="content">Conversion to source maps</span><a class="self-link" href="#source-maps"></a></h3>
