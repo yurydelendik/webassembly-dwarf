@@ -8,7 +8,7 @@ Markup Shorthands: markdown yes
 </pre>
 <pre class ="biblio">
 {
-  "dwarf-spec": {
+  "dwarf": {
     "href": "http://www.dwarfstd.org/doc/DWARF5.pdf",
     "title": "DWARF Debugging Information Format. Version 5"
   },
@@ -41,11 +41,11 @@ Markup Shorthands: markdown yes
 
 # Embedding DWARF data # {#embedding}
 
-The DWARF sections are embedded in the binary Wasm files as custom section [[wasm-debugging-capabilities#embeddable-in-wasm|ᴿembeddable-in-wasm]]. The name of the custom section is equal to the DWARF section name as defined in the specification, e.g. `.debug_info` or `.debug_line`. It will allow quickly scan and locate the section's data in a debugger or other tool.
+The DWARF sections are embedded in the binary Wasm files as custom section [[wasm-debugging-capabilities#embeddable-in-wasm|ᴿembeddable-in-wasm]]. The name of the custom section is equal to the DWARF section name as defined in the standard, e.g. `.debug_info` or `.debug_line`. It will allow quickly scan and locate the section's data in a debugger or other tool.
 
 The DWARF format is already compact [[wasm-debugging-capabilities/#compact-in-memory|ᴿcompact-in-memory]]. Furthermore, it is possible to remove DWARF sections from the production binary Wasm file and place them into a separate container without modifications [[wasm-debugging-capabilities/#compact-on-disk|ᴿcompact-on-disk]].
 
-See the full list of the sections and their relationship at DWARF Format Specification's Appendix B. [[!dwarf-spec]]
+See the full list of the sections and their relationship at DWARF Format Standard's Appendix B. [[!dwarf]]
 
 
 # Relationship with WebAssembly code # {#webassembly-code}
@@ -81,7 +81,7 @@ The `.debug_info` section also describes structures [[wasm-debugging-capabilitie
 
 ## DWARF Expressions ## {#dwarf-expressions}
 
-WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between `DW_OP_lo_user` and `DW_OP_hi_user` (see 7.1 Vendor Extensibility, [[!dwarf-spec]]).
+WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between `DW_OP_lo_user` and `DW_OP_hi_user` (see 7.1 Vendor Extensibility, [[!dwarf]]).
 
 The above extension will allow reading values of locals or globals [[wasm-debugging-capabilities/#reconstruct-a-bindings-value|ᴿreconstruct-a-bindings-value]] (see [[#debug_info_stucture]] above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into `.debug_info` section.
 
@@ -118,7 +118,7 @@ The second operand is a location item index and it is encoded as ULEB128 constan
 
 # Types information # {#types}
 
-The [[!dwarf-spec]] has the ability to store types information, e.g. in the `.debug_pubtypes` or `.debug_info` sections, that can be used by a debugger to display or pretty print more complex values [[wasm-debugging-capabilities/#types|ᴿtypes]]. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.
+The [[!dwarf]] has the ability to store types information, e.g. in the `.debug_pubtypes` or `.debug_info` sections, that can be used by a debugger to display or pretty print more complex values [[wasm-debugging-capabilities/#types|ᴿtypes]]. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.
 
 See also [[#debug_info_stucture]].
 
