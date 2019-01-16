@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="9dfa90e93a6f4ebe7dd9c38c12c0b37e0373e243" name="document-revision">
+  <meta content="39e7c9452b16b01e4b5df8d73f019d934809aa43" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1474,17 +1474,18 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
    <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Code Addresses</span><a class="self-link" href="#pc"></a></h3>
    <p class="note" role="note"><span>Note:</span> DWARF associates various bits of debug info with particular locations in the program via its code address (instruction pointer or PC). However, WebAssembly’s linear memory address space does not contain WebAssembly instructions.</p>
    <p>Wherever a code address (see 2.17 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) is used in DWARF for WebAssembly, it must be the offset of an instruction relative within the <code>Code</code> section of the WebAssembly file. The DWARF is considered malformed if a PC offset is between instruction boundaries within the <code>Code</code> section.</p>
-   <p><em>TODO: have we considered using i th instruction instead of offsets? This would result in smaller numbers that would encode as smaller LEB128s, and might be easier for consumers and generators. If we did consider that and don’t want it, it would be good to have a note here describing why we didn’t choose that alternative design.</em></p>
+   <p class="note" role="note"><span>Note:</span> It is expected that a DWARF consumer does not know how to decode WebAssembly instructions. The instruction pointer is selected as the offset in the binary file of the first byte of the instruction, and it is consistent with the <a href="https://www.w3.org/TR/wasm-web-api/#conventions">WebAssembly Web API §conventions</a> definition of the code location.</p>
    <div class="example no-marker" id="example-654f4982">
     <a class="self-link" href="#example-654f4982"></a>
     <div class="marker">EXAMPLE: .debug_line Instruction Pointers</div>
      The <code>.debug_line</code> DWARF section maps instruction pointers to source locations. With WebAssembly, the <code>.debug_line</code> section maps <code>Code</code> section-relative instruction offsets to source locations. 
    </div>
-   <div class="example no-marker" id="example-fe6dbcca">
-    <a class="self-link" href="#example-fe6dbcca"></a>
+   <div class="example no-marker" id="example-962b47d0">
+    <a class="self-link" href="#example-962b47d0"></a>
     <div class="marker">EXAMPLE: DW_AT_* Attributes</div>
      For entities with a single associated code address, DWARF uses the <code>DW_AT_low_pc</code> attribute to specify the associated code address value. For WebAssembly, the <code>DW_AT_low_pc</code>'s value is a <code>Code</code> section-relative instruction offset. 
     <p>For entities with a single contiguous range of code, DWARF uses a pair of <code>DW_AT_low_pc</code> and <code>DW_AT_high_pc</code> attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are <code>Code</code> section-relative instruction offsets.</p>
+    <p>For entities with multiple ranges of code, DWARF uses the <code>DW_AT_ranges</code> attribute, which refers to the array located at the <code>.debug_ranges</code> section.</p>
    </div>
    <h3 class="heading settled" data-level="2.2" id="DWARF-expressions-and-location-descriptions"><span class="secno">2.2. </span><span class="content">DWARF Expressions and Location Descriptions</span><a class="self-link" href="#DWARF-expressions-and-location-descriptions"></a></h3>
    <div class="note" role="note">

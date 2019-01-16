@@ -11,6 +11,10 @@ Markup Shorthands: markdown yes
   "DWARF": {
     "href": "http://www.DWARFstd.org/doc/DWARF5.pdf",
     "title": "DWARF Debugging Information Format. Version 5"
+  },
+  "wasm-web-api": {
+    "href": "https://www.w3.org/TR/wasm-web-api/",
+    "title": "WebAssembly Web API"
   }
 }
 </pre>
@@ -98,7 +102,7 @@ Note: DWARF associates various bits of debug info with particular locations in t
 
 Wherever a code address (see 2.17 of [[DWARF]]) is used in DWARF for WebAssembly, it must be the offset of an instruction relative within the `Code` section of the WebAssembly file. The DWARF is considered malformed if a PC offset is between instruction boundaries within the `Code` section.
 
-*TODO: have we considered using i th instruction instead of offsets? This would result in smaller numbers that would encode as smaller LEB128s, and might be easier for consumers and generators. If we did consider that and don't want it, it would be good to have a note here describing why we didn't choose that alternative design.*
+Note: It is expected that a DWARF consumer does not know how to decode WebAssembly instructions. The instruction pointer is selected as the offset in the binary file of the first byte of the instruction, and it is consistent with the [[wasm-web-api#conventions]] definition of the code location.
 
 <div class="example" heading=".debug_line Instruction Pointers">
 The `.debug_line` DWARF section maps instruction pointers to source locations. With WebAssembly, the `.debug_line` section maps `Code` section-relative instruction offsets to source locations.
@@ -108,6 +112,8 @@ The `.debug_line` DWARF section maps instruction pointers to source locations. W
 For entities with a single associated code address, DWARF uses the `DW_AT_low_pc` attribute to specify the associated code address value. For WebAssembly, the `DW_AT_low_pc`'s value is a `Code` section-relative instruction offset.
 
 For entities with a single contiguous range of code, DWARF uses a pair of `DW_AT_low_pc` and `DW_AT_high_pc` attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are `Code` section-relative instruction offsets.
+
+For entities with multiple ranges of code, DWARF uses the `DW_AT_ranges` attribute, which refers to the array located at the `.debug_ranges` section.
 </div>
 
 <!-- ## Data Addresses ## {#data-addresses} -->
