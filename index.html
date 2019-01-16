@@ -992,57 +992,93 @@ Possible extra rowspan handling
 	.toc > li li          { font-weight: normal; }
 	.toc > li li li       { font-size:   95%;    }
 	.toc > li li li li    { font-size:   90%;    }
+	.toc > li li li li .secno { font-size: 85%; }
 	.toc > li li li li li { font-size:   85%;    }
+	.toc > li li li li li .secno { font-size: 100%; }
 
-	.toc > li             { margin: 1.5rem 0;    }
-	.toc > li li          { margin: 0.3rem 0;    }
-	.toc > li li li       { margin-left: 2rem;   }
+	/* @supports not (display:grid) { */
+		.toc > li             { margin: 1.5rem 0;    }
+		.toc > li li          { margin: 0.3rem 0;    }
+		.toc > li li li       { margin-left: 2rem;   }
 
-	/* Section numbers in a column of their own */
-	.toc .secno {
-		float: left;
-		width: 4rem;
-		white-space: nowrap;
-	}
-	.toc > li li li li .secno {
-		font-size: 85%;
-	}
-	.toc > li li li li li .secno {
-		font-size: 100%;
-	}
+		/* Section numbers in a column of their own */
+		.toc .secno {
+			float: left;
+			width: 4rem;
+			white-space: nowrap;
+		}
 
-	:not(li) > .toc              { margin-left:  5rem; }
-	.toc .secno                  { margin-left: -5rem; }
-	.toc > li li li .secno       { margin-left: -7rem; }
-	.toc > li li li li .secno    { margin-left: -9rem; }
-	.toc > li li li li li .secno { margin-left: -11rem; }
+		.toc li {
+			clear: both;
+		}
 
-	/* Tighten up indentation in narrow ToCs */
-	@media (max-width: 30em) {
-		:not(li) > .toc              { margin-left:  4rem; }
-		.toc .secno                  { margin-left: -4rem; }
-		.toc > li li li              { margin-left:  1rem; }
-		.toc > li li li .secno       { margin-left: -5rem; }
-		.toc > li li li li .secno    { margin-left: -6rem; }
-		.toc > li li li li li .secno { margin-left: -7rem; }
-	}
-	@media screen and (min-width: 78em) {
-		body:not(.toc-inline) :not(li) > .toc              { margin-left:  4rem; }
-		body:not(.toc-inline) .toc .secno                  { margin-left: -4rem; }
-		body:not(.toc-inline) .toc > li li li              { margin-left:  1rem; }
-		body:not(.toc-inline) .toc > li li li .secno       { margin-left: -5rem; }
-		body:not(.toc-inline) .toc > li li li li .secno    { margin-left: -6rem; }
-		body:not(.toc-inline) .toc > li li li li li .secno { margin-left: -7rem; }
-	}
-	body.toc-sidebar #toc :not(li) > .toc              { margin-left:  4rem; }
-	body.toc-sidebar #toc .toc .secno                  { margin-left: -4rem; }
-	body.toc-sidebar #toc .toc > li li li              { margin-left:  1rem; }
-	body.toc-sidebar #toc .toc > li li li .secno       { margin-left: -5rem; }
-	body.toc-sidebar #toc .toc > li li li li .secno    { margin-left: -6rem; }
-	body.toc-sidebar #toc .toc > li li li li li .secno { margin-left: -7rem; }
+		:not(li) > .toc              { margin-left:  5rem; }
+		.toc .secno                  { margin-left: -5rem; }
+		.toc > li li li .secno       { margin-left: -7rem; }
+		.toc > li li li li .secno    { margin-left: -9rem; }
+		.toc > li li li li li .secno { margin-left: -11rem; }
 
-	.toc li {
-		clear: both;
+		/* Tighten up indentation in narrow ToCs */
+		@media (max-width: 30em) {
+			:not(li) > .toc              { margin-left:  4rem; }
+			.toc .secno                  { margin-left: -4rem; }
+			.toc > li li li              { margin-left:  1rem; }
+			.toc > li li li .secno       { margin-left: -5rem; }
+			.toc > li li li li .secno    { margin-left: -6rem; }
+			.toc > li li li li li .secno { margin-left: -7rem; }
+		}
+	/* } */
+
+	@supports (display:grid) {
+		/* Use #toc over .toc to override non-@supports rules. */
+		#toc {
+			display: grid;
+			align-content: start;
+			grid-template-columns: auto 1fr;
+			grid-column-gap: 1rem;
+			column-gap: 1rem;
+			grid-row-gap: .6rem;
+			row-gap: .6rem;
+		}
+		#toc h2 {
+			grid-column: 1 / -1;
+			margin-bottom: 0;
+		}
+		#toc ol,
+		#toc li,
+		#toc a {
+			display: contents;
+			/* Switch <a> to subgrid when supported */
+		}
+		#toc span {
+			margin: 0;
+		}
+		#toc > .toc > li > a > span {
+			/* The spans of the top-level list,
+			   comprising the first items of each top-level section. */
+			margin-top: 1.1rem;
+		}
+		#toc#toc .secno { /* Ugh, need more specificity to override base.css */
+			grid-column: 1;
+			width: auto;
+			margin-left: 0;
+		}
+		#toc .content {
+			grid-column: 2;
+			width: auto;
+			margin-right: 1rem;
+		}
+		#toc .content:hover {
+			background: rgba(75%, 75%, 75%, .25);
+			border-bottom: 3px solid #054572;
+			margin-bottom: -3px;
+		}
+		#toc li li li .content {
+			margin-left: 1rem;
+		}
+		#toc li li li li .content {
+			margin-left: 2rem;
+		}
 	}
 
 
@@ -1176,8 +1212,8 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 150b038a54cb926cf8e3d36fd8b108c226cb94b8" name="generator">
-  <meta content="64da3e6f6a89fabcb1aeb1a0fc65aa9c6093b09a" name="document-revision">
+  <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
+  <meta content="9dfa90e93a6f4ebe7dd9c38c12c0b37e0373e243" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1334,9 +1370,11 @@ pre .property::before, pre .property::after {
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2019-01-10">10 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2019-01-16">16 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
+     <dt>Issue Tracking:
+     <dd><a href="https://github.com/yurydelendik/webassembly-dwarf/issues/">GitHub</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><span class="p-name fn">Yury Delendik</span>
     </dl>
@@ -1344,7 +1382,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 10 January 2019,
+In addition, as of 16 January 2019,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1421,25 +1459,16 @@ Sections:
    </div>
    <h3 class="heading settled" data-level="1.2" id="external-DWARF"><span class="secno">1.2. </span><span class="content">External DWARF File</span><a class="self-link" href="#external-DWARF"></a></h3>
    <p class="note" role="note"><span>Note:</span> Existing external DWARF debug info schemes have typically been designed for reducing the amount of debug info that a linker must process and relocate (see "Appendix F: Split DWARF Object Files" in <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>). On the other hand, the motivation for external DWARF files with WebAssembly is to reduce the size of the WebAssembly file to speed up network transfers. If a WebAssembly file is served over HTTP and its DWARF debug info is not needed, then the WebAssembly file can be downloaded more quickly if the DWARF is external.</p>
-   <p><em>TODO: is this the custom section name we want? Do we want it to always be a URL? Always absolute? If relative, relative to what? Do we want to allow file paths?</em></p>
-   <p>A WebAssembly file that has external DWARF contains a custom section named "external_DWARF". The contents of the custom section contains a UTF-8 encoded URL string that points to the external DWARF file or a UTF-8 encoded path string that points to the external DWARF file on the filesystem.</p>
-<pre>external_DWARF ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
+   <p>A WebAssembly file that has external DWARF contains a custom section named "external_debug_info". The contents of the custom section contain a UTF-8 encoded URL string that points to the external DWARF file.</p>
+   <p class="note" role="note"><span>Note:</span> It is preferable that the URL will be in relative form, relative to the WebAssembly file, to make DWARF debug info relocatable and consumable from an alternative or cached location.</p>
+<pre>external_debug_info ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
 
-ed_data        ::= n:<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-name">name</a> ed_field+                  (if n = "external_DWARF")
-
-ed_field       ::= ed_field_kind ed_field_value
-
-ed_field_kind  ::= 0 ;; URL
-                 | 1 ;; File path
-
-ed_field_value ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
+ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
 </pre>
-   <p>If <code>ed_field_kind</code> is <code>0</code>, then the <code>ed_field_value</code> UTF-8 string must be a URL pointing to the external DWARF file. If <code>ed_field_kind</code> is <code>1</code>, then the <code>ed_field_value</code> UTF-8 string must be a file path pointing to the external DWARF file. If there are multiple <code>ed_field</code>s, a DWARF consumer may choose any of them.</p>
-   <p class="note" role="note"><span>Note:</span> Being explicit about whether the external DWARF file is referenced by URL or by file path simplifies the job of getting the external DWARF file for DWARF consumers. Something that has plagued the source map tooling community has been inconsistent use of URLs vs file paths in different parts of the pipeline and tools that always assume one or the other.</p>
-   <p class="note" role="note"><span>Note:</span> Allowing multiple <code>ed_field</code>s allows tools to specify both a file path for local development and URL for development on a server. A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL, even if these ultimately point to the same external DWARF file.</p>
-   <p>The external DWARF file pointed to by an <code>ed_field</code> must be a WebAssembly file with <a href="#embedding-DWARF">embedded DWARF debug info</a>. A DWARF consumer should ignore any non-DWARF WebAssembly sections in this file.</p>
-   <p><em>TODO: should we allow pointing to an external DWARF file that does not have embedded DWARF, but instead points to another external DWARF file? If so, we should mention something about allowing consumer implementations to enforce their own arbitrary max depth, and also say something about cycles.</em></p>
-   <p><em>TODO: should we allow heterogeneous embedded and external DWARF? Eg, have debug_line embedded, but debug_info external?</em></p>
+   <p class="note" role="note"><span>Note:</span> A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL. The <code>ed_data</code> field needs to be decoded according to "file" URI Scheme rules when it needs to be used as a file path, which can be environment specific.</p>
+   <p>If the "external_debug_info" section is present, any DWARF debug info WebAssembly sections are ignored. A DWARF producer needs to remove such sections to reduce the size of the WebAssembly file. If more than one valid "external_debug_info" section is present, consumers will use the last one.</p>
+   <p>The external DWARF file pointed to by the <code>ed_data</code> must be a WebAssembly file with <a href="#embedding-DWARF">embedded DWARF debug info</a>. A DWARF consumer should ignore any non-DWARF WebAssembly sections in this file, including instances of "external_debug_info" sections.</p>
+   <p class="note" role="note"><span>Note:</span> The relocatable WebAssembly file may contain sections that are used to assist with updating references to data locations or code instructions. In this case, the relocatable sections for DWARF debug info section needs can be present in the external DWARF file to assist code producers.</p>
    <h2 class="heading settled" data-level="2" id="webassembly-code"><span class="secno">2. </span><span class="content">Consuming and Generating DWARF for WebAssembly Code</span><a class="self-link" href="#webassembly-code"></a></h2>
    <p class="note" role="note"><span>Note:</span> Some DWARF constructs don’t map one-to-one onto WebAssembly constructs. We strive to enumerate and resolve any ambiguities here.</p>
    <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Code Addresses</span><a class="self-link" href="#pc"></a></h3>

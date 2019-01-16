@@ -70,34 +70,23 @@ Sections:
 
 Note: Existing external DWARF debug info schemes have typically been designed for reducing the amount of debug info that a linker must process and relocate (see "Appendix F: Split DWARF Object Files" in [[DWARF]]). On the other hand, the motivation for external DWARF files with WebAssembly is to reduce the size of the WebAssembly file to speed up network transfers. If a WebAssembly file is served over HTTP and its DWARF debug info is not needed, then the WebAssembly file can be downloaded more quickly if the DWARF is external.
 
-*TODO: is this the custom section name we want? Do we want it to always be a URL? Always absolute? If relative, relative to what? Do we want to allow file paths?*
+A WebAssembly file that has external DWARF contains a custom section named "external_debug_info". The contents of the custom section contain a UTF-8 encoded URL string that points to the external DWARF file.
 
-A WebAssembly file that has external DWARF contains a custom section named "external_DWARF". The contents of the custom section contains a UTF-8 encoded URL string that points to the external DWARF file or a UTF-8 encoded path string that points to the external DWARF file on the filesystem.
+Note: It is preferable that the URL will be in relative form, relative to the WebAssembly file, to make DWARF debug info relocatable and consumable from an alternative or cached location.
 
 <pre>
-external_DWARF ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
+external_debug_info ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
 
-ed_data        ::= n:<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-name">name</a> ed_field+                  (if n = "external_DWARF")
-
-ed_field       ::= ed_field_kind ed_field_value
-
-ed_field_kind  ::= 0 ;; URL
-                 | 1 ;; File path
-
-ed_field_value ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
+ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
 </pre>
 
-If `ed_field_kind` is `0`, then the `ed_field_value` UTF-8 string must be a URL pointing to the external DWARF file. If `ed_field_kind` is `1`, then the `ed_field_value` UTF-8 string must be a file path pointing to the external DWARF file. If there are multiple `ed_field`s, a DWARF consumer may choose any of them.
+Note: A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL. The `ed_data` field needs to be decoded according to "file" URI Scheme rules when it needs to be used as a file path, which can be environment specific.
 
-Note: Being explicit about whether the external DWARF file is referenced by URL or by file path simplifies the job of getting the external DWARF file for DWARF consumers. Something that has plagued the source map tooling community has been inconsistent use of URLs vs file paths in different parts of the pipeline and tools that always assume one or the other.
+If the "external_debug_info" section is present, any DWARF debug info WebAssembly sections are ignored. A DWARF producer needs to remove such sections to reduce the size of the WebAssembly file. If more than one valid "external_debug_info" section is present, consumers will use the last one.
 
-Note: Allowing multiple `ed_field`s allows tools to specify both a file path for local development and URL for development on a server. A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL, even if these ultimately point to the same external DWARF file.
+The external DWARF file pointed to by the `ed_data` must be a WebAssembly file with [[#embedding-DWARF|embedded DWARF debug info]]. A DWARF consumer should ignore any non-DWARF WebAssembly sections in this file, including instances of "external_debug_info" sections.
 
-The external DWARF file pointed to by an `ed_field` must be a WebAssembly file with [[#embedding-DWARF|embedded DWARF debug info]]. A DWARF consumer should ignore any non-DWARF WebAssembly sections in this file.
-
-*TODO: should we allow pointing to an external DWARF file that does not have embedded DWARF, but instead points to another external DWARF file? If so, we should mention something about allowing consumer implementations to enforce their own arbitrary max depth, and also say something about cycles.*
-
-*TODO: should we allow heterogeneous embedded and external DWARF? Eg, have debug_line embedded, but debug_info external?*
+Note: The relocatable WebAssembly file may contain sections that are used to assist with updating references to data locations or code instructions. In this case, the relocatable sections for DWARF debug info section needs can be present in the external DWARF file to assist code producers.
 
 # Consuming and Generating DWARF for WebAssembly Code # {#webassembly-code}
 
