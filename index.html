@@ -1213,7 +1213,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="39e7c9452b16b01e4b5df8d73f019d934809aa43" name="document-revision">
+  <meta content="212241b1f63a454092dc6447a8edb584b9d69448" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1502,41 +1502,51 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
     </ol>
     <p>Each of these location descriptions are applicable to values in WebAssembly, and may be used as they normally are, except for the third: register location descriptions. WebAssembly does not have registers per se. Instead, it has three distinct kinds of virtual registers (globals, locals, and the operand stack) and may use up to 2<sup>32</sup> - 1 instances of each virtual register.</p>
    </div>
-   <p>When a program object’s value is stored in a WebAssembly local, global, or on the operand stack it must be encoded as an offset from a well-known register number with the <code>DW_OP_breg<sub>n</sub></code> DWARF expression operation (see 2.5.1.2 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>).</p>
+   <p>When a program object’s value is stored in a WebAssembly local, global, or on the operand stack it must be encoded as an extended DWARF operation. The meanings of the existing DWARF location does not match definitions of local, global, or operands stack. The proposed format for the extension is:</p>
+<pre>wasm-ext := DW_OP_WASM_location wasm-op
+
+DW_OP_WASM_location := 0xEB ;; available DWARF extension code
+
+wasm-op := wasm-local | wasm-global | wasm-operand-stack
+
+wasm-local := 0x00 i:uleb128
+
+wasm-global := 0x01 i:uleb128
+
+wasm-operand-stack := 0x02 i:uleb128
+</pre>
    <table class="index">
-    <caption>Summary of encoding WebAssembly-specific constructs as DWARF registers and offsets</caption>
+    <caption>Summary of encoding WebAssembly-specific constructs</caption>
     <thead>
      <tr>
       <th>DWARF Register Number
       <th>WebAssembly Construct
-      <th>Meaning of offset i
+      <th>Meaning of the argument
     <tbody>
      <tr>
-      <td>1
+      <td>0
       <td>Local
       <td>The i<sup>th</sup> local of the function.
      <tr>
-      <td>2
+      <td>1
       <td>Global
       <td>The i<sup>th</sup> global of the module.
      <tr>
-      <td>3
+      <td>2
       <td>Operand Stack
       <td>The i<sup>th</sup> item on the operand stack.
    </table>
-   <div class="note" role="note">
-     Note: An alternative approach to encoding locals, globals, and the operand stack would be to pack them into DWARF registers directly. If there are L locals, and G globals, then DWARF registers 0 &lt;= g &lt; G would reference each global, DWARF registers G &lt;= l &lt; G+L would reference each local, and DWARF registers s >= G+L would reference values on the operand stack. <em>TODO: what are the downsides of this approach again? Why aren’t we doing this? Should explain that here.</em> 
-    <p>Another alternative approach would be to leverage DWARF’s vendor extensibilty (see 7.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. We would define <code>DW_OP_wasm_local</code>, <code>DW_OP_wasm_global</code>, and <code>DW_OP_wasm_operand_stack</code> operations that each took a ULEB128-encoded operand. <em>TODO: why aren’t we doing this? Should enumerate the downsides and explain why here.</em></p>
-   </div>
+   <p class="note" role="note"><span>Note:</span> This approach leverages DWARF’s vendor extensibility (see 7.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of need operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.</p>
+   <p class="note" role="note"><span>Note:</span> The WebAssembly does not impose a limit of the maximum amount of local or globals. It will be a challenge to agree on an encoding scheme to represent WebAssembly locations listed above as registers, as well as documenting this scheme in the DWARF standard.</p>
    <h4 class="heading settled" data-level="2.2.1" id="location-descriptions-locals"><span class="secno">2.2.1. </span><span class="content">Locals</span><a class="self-link" href="#location-descriptions-locals"></a></h4>
-   <p>If a value is located in the currently executing function’s i<sup>th</sup> local, then its DWARF register location is register 1 offset i, where 0 &lt;= i &lt; 2<sup>32</sup>.</p>
-   <p>The value’s location description must be encoded as a <code>DW_OP_breg1</code> operation with i as its SLEB128-encoded operand.</p>
+   <p>If a value is located in the currently executing function’s i<sup>th</sup> local.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x00</code> operation with i as its ULEB128-encoded operand.</p>
    <h4 class="heading settled" data-level="2.2.2" id="location-descriptions-globals"><span class="secno">2.2.2. </span><span class="content">Global</span><a class="self-link" href="#location-descriptions-globals"></a></h4>
-   <p>If a value is located in the i<sup>th</sup> global, then its DWARF register location is register 2 offset i, where 0 &lt;= i &lt; 2<sup>32</sup>.</p>
-   <p>The value’s location description must be encoded as a <code>DW_OP_breg2</code> operation with i as its SLEB128-encoded operand.</p>
+   <p>If a value is located in the i<sup>th</sup> global.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x01</code> operation with i as its ULEB128-encoded operand.</p>
    <h4 class="heading settled" data-level="2.2.3" id="location-descriptions-operand-stack"><span class="secno">2.2.3. </span><span class="content">Operand Stack</span><a class="self-link" href="#location-descriptions-operand-stack"></a></h4>
    <p>If a value is located in the i<sup>th</sup> entry on the operand stack, then its DWARF register location is register 2 offset i, where 0 &lt;= i &lt; length(operand stack). i = 0 is the bottom of the operand stack.</p>
-   <p>The value’s location description must be encoded as a <code>DW_OP_breg3</code> operation with i as its SLEB128-encoded  operand.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x02</code> operation with i as its ULEB128-encoded  operand.</p>
    <p class="note" role="note"><span>Note:</span> Using i = 0 as the bottom of the operand stack means that location descriptions will not need to be updated as frequently as if i = 0 were the top of the operand stack, since Wasm instructions are constantly pushing to and popping from the operand stack.</p>
   </main>
   <div data-fill-with="conformance">
