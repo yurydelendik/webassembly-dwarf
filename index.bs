@@ -1,7 +1,7 @@
 <pre class=metadata>
 Title: DWARF for WebAssembly
 Editor: Yury Delendik
-Status: FINDING
+Status: LD
 Shortname: DWARF-webassembly
 Abstract: This document describes how to use DWARF debug information with WebAssembly.
 Markup Shorthands: markdown yes
