@@ -1,7 +1,7 @@
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <title>DWARF for WebAssembly Target</title>
+  <title>DWARF for WebAssembly</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 <style data-fill-with="stylesheet">/******************************************************************************
  *                   Style sheet for the W3C specifications                   *
@@ -992,93 +992,57 @@ Possible extra rowspan handling
 	.toc > li li          { font-weight: normal; }
 	.toc > li li li       { font-size:   95%;    }
 	.toc > li li li li    { font-size:   90%;    }
-	.toc > li li li li .secno { font-size: 85%; }
 	.toc > li li li li li { font-size:   85%;    }
-	.toc > li li li li li .secno { font-size: 100%; }
 
-	/* @supports not (display:grid) { */
-		.toc > li             { margin: 1.5rem 0;    }
-		.toc > li li          { margin: 0.3rem 0;    }
-		.toc > li li li       { margin-left: 2rem;   }
+	.toc > li             { margin: 1.5rem 0;    }
+	.toc > li li          { margin: 0.3rem 0;    }
+	.toc > li li li       { margin-left: 2rem;   }
 
-		/* Section numbers in a column of their own */
-		.toc .secno {
-			float: left;
-			width: 4rem;
-			white-space: nowrap;
-		}
+	/* Section numbers in a column of their own */
+	.toc .secno {
+		float: left;
+		width: 4rem;
+		white-space: nowrap;
+	}
+	.toc > li li li li .secno {
+		font-size: 85%;
+	}
+	.toc > li li li li li .secno {
+		font-size: 100%;
+	}
 
-		.toc li {
-			clear: both;
-		}
+	:not(li) > .toc              { margin-left:  5rem; }
+	.toc .secno                  { margin-left: -5rem; }
+	.toc > li li li .secno       { margin-left: -7rem; }
+	.toc > li li li li .secno    { margin-left: -9rem; }
+	.toc > li li li li li .secno { margin-left: -11rem; }
 
-		:not(li) > .toc              { margin-left:  5rem; }
-		.toc .secno                  { margin-left: -5rem; }
-		.toc > li li li .secno       { margin-left: -7rem; }
-		.toc > li li li li .secno    { margin-left: -9rem; }
-		.toc > li li li li li .secno { margin-left: -11rem; }
+	/* Tighten up indentation in narrow ToCs */
+	@media (max-width: 30em) {
+		:not(li) > .toc              { margin-left:  4rem; }
+		.toc .secno                  { margin-left: -4rem; }
+		.toc > li li li              { margin-left:  1rem; }
+		.toc > li li li .secno       { margin-left: -5rem; }
+		.toc > li li li li .secno    { margin-left: -6rem; }
+		.toc > li li li li li .secno { margin-left: -7rem; }
+	}
+	@media screen and (min-width: 78em) {
+		body:not(.toc-inline) :not(li) > .toc              { margin-left:  4rem; }
+		body:not(.toc-inline) .toc .secno                  { margin-left: -4rem; }
+		body:not(.toc-inline) .toc > li li li              { margin-left:  1rem; }
+		body:not(.toc-inline) .toc > li li li .secno       { margin-left: -5rem; }
+		body:not(.toc-inline) .toc > li li li li .secno    { margin-left: -6rem; }
+		body:not(.toc-inline) .toc > li li li li li .secno { margin-left: -7rem; }
+	}
+	body.toc-sidebar #toc :not(li) > .toc              { margin-left:  4rem; }
+	body.toc-sidebar #toc .toc .secno                  { margin-left: -4rem; }
+	body.toc-sidebar #toc .toc > li li li              { margin-left:  1rem; }
+	body.toc-sidebar #toc .toc > li li li .secno       { margin-left: -5rem; }
+	body.toc-sidebar #toc .toc > li li li li .secno    { margin-left: -6rem; }
+	body.toc-sidebar #toc .toc > li li li li li .secno { margin-left: -7rem; }
 
-		/* Tighten up indentation in narrow ToCs */
-		@media (max-width: 30em) {
-			:not(li) > .toc              { margin-left:  4rem; }
-			.toc .secno                  { margin-left: -4rem; }
-			.toc > li li li              { margin-left:  1rem; }
-			.toc > li li li .secno       { margin-left: -5rem; }
-			.toc > li li li li .secno    { margin-left: -6rem; }
-			.toc > li li li li li .secno { margin-left: -7rem; }
-		}
-	/* } */
-
-	@supports (display:grid) {
-		/* Use #toc over .toc to override non-@supports rules. */
-		#toc {
-			display: grid;
-			align-content: start;
-			grid-template-columns: auto 1fr;
-			grid-column-gap: 1rem;
-			column-gap: 1rem;
-			grid-row-gap: .6rem;
-			row-gap: .6rem;
-		}
-		#toc h2 {
-			grid-column: 1 / -1;
-			margin-bottom: 0;
-		}
-		#toc ol,
-		#toc li,
-		#toc a {
-			display: contents;
-			/* Switch <a> to subgrid when supported */
-		}
-		#toc span {
-			margin: 0;
-		}
-		#toc > .toc > li > a > span {
-			/* The spans of the top-level list,
-			   comprising the first items of each top-level section. */
-			margin-top: 1.1rem;
-		}
-		#toc#toc .secno { /* Ugh, need more specificity to override base.css */
-			grid-column: 1;
-			width: auto;
-			margin-left: 0;
-		}
-		#toc .content {
-			grid-column: 2;
-			width: auto;
-			margin-right: 1rem;
-		}
-		#toc .content:hover {
-			background: rgba(75%, 75%, 75%, .25);
-			border-bottom: 3px solid #054572;
-			margin-bottom: -3px;
-		}
-		#toc li li li .content {
-			margin-left: 1rem;
-		}
-		#toc li li li li .content {
-			margin-left: 2rem;
-		}
+	.toc li {
+		clear: both;
 	}
 
 
@@ -1212,8 +1176,13 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="2d94e96374a658d404514c8533f5cd2feb87f171" name="document-revision">
+  <meta content="Bikeshed version 150b038a54cb926cf8e3d36fd8b108c226cb94b8" name="generator">
+  <meta content="64da3e6f6a89fabcb1aeb1a0fc65aa9c6093b09a" name="document-revision">
+<style>
+p, body {
+    hyphens: none;
+}
+</style>
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1364,12 +1333,10 @@ pre .property::before, pre .property::after {
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
-   <h1 class="p-name no-ref" id="title">DWARF for WebAssembly Target</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2018-12-13">13 December 2018</time></span></h2>
+   <h1 class="p-name no-ref" id="title">DWARF for WebAssembly</h1>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Finding, <time class="dt-updated" datetime="2019-01-10">10 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
-     <dt>Issue Tracking:
-     <dd><a href="https://github.com/yurydelendik/webassembly-dwarf/issues/">GitHub</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><span class="p-name fn">Yury Delendik</span>
     </dl>
@@ -1377,7 +1344,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 13 December 2018,
+In addition, as of 10 January 2019,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1385,139 +1352,162 @@ Parts of this work may be from another specification document.  If so, those par
   </div>
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
-   <p>This document describes how existing DWARF format can be extended and used with the WebAssembly binaries.</p>
+   <p>This document describes how to use DWARF debug information with WebAssembly.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
-    <li><a href="#embedding"><span class="secno">1</span> <span class="content">Embedding DWARF data</span></a>
     <li>
-     <a href="#webassembly-code"><span class="secno">2</span> <span class="content">Relationship with WebAssembly code</span></a>
+     <a href="#locating"><span class="secno">1</span> <span class="content">Locating the DWARF Debug Info for a WebAssembly File</span></a>
      <ol class="toc">
-      <li>
-       <a href="#pc"><span class="secno">2.1</span> <span class="content">Instruction Pointer</span></a>
-       <ol class="toc">
-        <li><a href="#debug_line"><span class="secno">2.1.1</span> <span class="content">.debug_line section</span></a>
-        <li><a href="#debug_info_code"><span class="secno">2.1.2</span> <span class="content">.debug_info section code ranges</span></a>
-       </ol>
-      <li>
-       <a href="#memory-address"><span class="secno">2.2</span> <span class="content">Memory Address</span></a>
-       <ol class="toc">
-        <li><a href="#debug_info_stucture"><span class="secno">2.2.1</span> <span class="content">.debug_info structures information</span></a>
-       </ol>
-      <li>
-       <a href="#dwarf-expressions"><span class="secno">2.3</span> <span class="content">DWARF Expressions</span></a>
-       <ol class="toc">
-        <li><a href="#dwarf-locals"><span class="secno">2.3.1</span> <span class="content">Proposed DWARF expression extension for locals</span></a>
-       </ol>
+      <li><a href="#embedding-DWARF"><span class="secno">1.1</span> <span class="content">Embedding DWARF Within a WebAssembly File</span></a>
+      <li><a href="#external-DWARF"><span class="secno">1.2</span> <span class="content">External DWARF File</span></a>
      </ol>
-    <li><a href="#types"><span class="secno">3</span> <span class="content">Types information</span></a>
     <li>
-     <a href="#tools"><span class="secno">4</span> <span class="content">Usage by tools</span></a>
+     <a href="#webassembly-code"><span class="secno">2</span> <span class="content">Consuming and Generating DWARF for WebAssembly Code</span></a>
      <ol class="toc">
-      <li><a href="#source-maps"><span class="secno">4.1</span> <span class="content">Conversion to source maps</span></a>
-      <li><a href="#wasm-debugger"><span class="secno">4.2</span> <span class="content">Use in WebAssembly debuggers</span></a>
-      <li><a href="#aot-jit"><span class="secno">4.3</span> <span class="content">Use in AOT or JIT compilers</span></a>
+      <li><a href="#pc"><span class="secno">2.1</span> <span class="content">Code Addresses</span></a>
+      <li>
+       <a href="#DWARF-expressions-and-location-descriptions"><span class="secno">2.2</span> <span class="content">DWARF Expressions and Location Descriptions</span></a>
+       <ol class="toc">
+        <li><a href="#location-descriptions-locals"><span class="secno">2.2.1</span> <span class="content">Locals</span></a>
+        <li><a href="#location-descriptions-globals"><span class="secno">2.2.2</span> <span class="content">Global</span></a>
+        <li><a href="#location-descriptions-operand-stack"><span class="secno">2.2.3</span> <span class="content">Operand Stack</span></a>
+       </ol>
      </ol>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
-      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
    </ol>
   </nav>
   <main>
-   <h2 class="heading settled" data-level="1" id="embedding"><span class="secno">1. </span><span class="content">Embedding DWARF data</span><a class="self-link" href="#embedding"></a></h2>
-   <p>The DWARF sections are embedded in the binary WASM files as custom section <a href="https://fitzgen.github.io/wasm-debugging-capabilities#embeddable-in-wasm">ᴿembeddable-in-wasm</a>. The name of the custom section is equal to the DWARF section name as defined in the specification, e.g. <code>.debug_info</code> or <code>.debug_line</code>. It will allow quickly scan and locate the section’s data in a debugger or other tool.</p>
-   <p>The DWARF format is already compact <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-in-memory">ᴿcompact-in-memory</a>. Furthermore, it is possible to remove DWARF sections from the production binary WASM file and place them into a separate container without modifications <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#compact-on-disk">ᴿcompact-on-disk</a>.</p>
-   <p>See the full list of the sections and their relationship at DWARF Format Specification’s Appendix B. <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a></p>
-   <h2 class="heading settled" data-level="2" id="webassembly-code"><span class="secno">2. </span><span class="content">Relationship with WebAssembly code</span><a class="self-link" href="#webassembly-code"></a></h2>
-   <p>The DWARF information can refer to an instruction pointer or location in memory. In addition to that, special WebAssembly primitives such as locals or globals need to be referenced.</p>
-   <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Instruction Pointer</span><a class="self-link" href="#pc"></a></h3>
-   <p>The instruction pointer (or PC) is currently defined as WebAssembly bytecode offset, starting from code section body.  The mapping instruction pointer to bytecode offset simplifies resolution between the call stack PC pointer and WebAssembly code debug information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#code-to-source">ᴿcode-to-source</a>. Many sections, such as <code>.debug_info</code>, <code>.debug_line</code>, etc., refer to a particular instruction by their bytecode offset, and it will be unique.</p>
-   <p>It is also trivial to map WebAssembly bytecode offset to the derived native PC, e.g. during AOT or JIT compilation, for a use in a native debugger.</p>
-   <h4 class="heading settled" data-level="2.1.1" id="debug_line"><span class="secno">2.1.1. </span><span class="content">.debug_line section</span><a class="self-link" href="#debug_line"></a></h4>
-   <p>The <code>.debug_line</code> section allows mapping between bytecode offset and original source. The relationship between these location types is many-to-one: multiple bytecode offsets may correspond a single original source location <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#enumerate-location-mappings">ᴿenumerate-location-mappings</a>.</p>
-   <p>This information is complete to produce wasm source map file <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a>.</p>
-   <h4 class="heading settled" data-level="2.1.2" id="debug_info_code"><span class="secno">2.1.2. </span><span class="content">.debug_info section code ranges</span><a class="self-link" href="#debug_info_code"></a></h4>
-   <p>The <code>.debug_info</code> section contains information about a compile unit, that is comprised of subprogram/functions entries. Individual function entry contains information about its parameters and variables. This information includes their types <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#type-of-binding">ᴿtype-of-binding</a>, the bindings in scopes at a certain locations <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#bindings-within-a-scope">ᴿbindings-within-a-scope</a> and how to calculate a variable value using DWARF expression <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a>.</p>
-   <p>The inlined function is expressed inside the <code>.debug_info</code> function entries <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#inlined-functions">ᴿinlined-functions</a> and also contain a proper mapping in the <code>.debug_line</code> section.</p>
-   <h3 class="heading settled" data-level="2.2" id="memory-address"><span class="secno">2.2. </span><span class="content">Memory Address</span><a class="self-link" href="#memory-address"></a></h3>
-   <p>The location in memory, e.g. expressions that point to static variables defined on a heap, has the same definition as in traditional architectures.</p>
-   <h4 class="heading settled" data-level="2.2.1" id="debug_info_stucture"><span class="secno">2.2.1. </span><span class="content">.debug_info structures information</span><a class="self-link" href="#debug_info_stucture"></a></h4>
-   <p>The <code>.debug_info</code> section also describes structures <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#type-of-binding">ᴿtype-of-binding</a>. These description include the structure field types and locations. A consumer (e.g. a debugger) can format the variable display based on this type information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a>.</p>
-   <h3 class="heading settled" data-level="2.3" id="dwarf-expressions"><span class="secno">2.3. </span><span class="content">DWARF Expressions</span><a class="self-link" href="#dwarf-expressions"></a></h3>
-   <p>WebAssembly does not have registers, which DWARF expressions normally use to calculate the values of original source variables. WebAssembly compilers will use operands stack, locals or globals to store these variables values. To refer locals and globals in DWARF expressions, the built-in language extension of the DWARF expression will be used. The special operator code will be chosen in the range between <code>DW_OP_lo_user</code> and <code>DW_OP_hi_user</code> (see 7.1 Vendor Extensibility, <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a>).</p>
-   <p>The above extension will allow reading values of locals or globals <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#reconstruct-a-bindings-value">ᴿreconstruct-a-bindings-value</a> (see <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a> above). Compilers need to learn to track all mappings of the original source variables to operands stack locals, or globals (instead of native platform registers), calculate their lifetime and serialize that into <code>.debug_info</code> section.</p>
-   <p>This extension allows separating logically incompatible native platform concepts of registers/memory and WebAssembly specific elements. When DWARF information needed to be transformed for use in the native debugger, e.g. as JIT’ed code, the <code>DW_OP_WASM_location</code> extension can be easily replaced with native registers or memory location expression. There is no real advantage to overcomplicate logic of producers and consumers of the DWARF information with artificial mapping scheme that express WebAssembly specific location as CPU registers.</p>
-   <h4 class="heading settled" data-level="2.3.1" id="dwarf-locals"><span class="secno">2.3.1. </span><span class="content">Proposed DWARF expression extension for locals</span><a class="self-link" href="#dwarf-locals"></a></h4>
-   <p>The <code>DW_OP_WASM_location</code> with code <code>0xED</code> can be added to the DWARF expression language. This operation will have two operands.</p>
-   <p>The first operand defines the type of the WebAssembly location. It is encoded as ULEB128 constant.</p>
-   <p>The second operand is a location item index and it is encoded as ULEB128 constant.</p>
+   <h2 class="heading settled" data-level="1" id="locating"><span class="secno">1. </span><span class="content">Locating the DWARF Debug Info for a WebAssembly File</span><a class="self-link" href="#locating"></a></h2>
+   <p>The DWARF debug info for a WebAssembly file is either embedded in the WebAssembly file itself, or it is in a separate, external file. A WebAssembly file should not have both embedded DWARF and external DWARF; if this is the case, a DWARF consumer may use either DWARF debug info or it may consider the WebAssembly to lack DWARF debug info.</p>
+   <h3 class="heading settled" data-level="1.1" id="embedding-DWARF"><span class="secno">1.1. </span><span class="content">Embedding DWARF Within a WebAssembly File</span><a class="self-link" href="#embedding-DWARF"></a></h3>
+   <p>The DWARF sections are embedded in Wasm binary files as custom sections. Each custom section’s name matches the DWARF section name as defined in the DWARF standard, e.g. <code>.debug_info</code> or <code>.debug_line</code>.</p>
+   <p class="note" role="note"><span>Note:</span> The full list of DWARF sections and the relationships between them are available in Appendix B of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>.</p>
+   <p class="note" role="note"><span>Note:</span> Embedding each DWARF section in its own custom section within the Wasm binary matches how DWARF is embedded into other binary formats. For example with ELF binaries, each DWARF section is embedded as an ELF section, and similar for Mach-O binaries (although the "." in the section name is substituted with "__" in Mach-O).</p>
+   <div class="example" id="example-8cac3472">
+    <a class="self-link" href="#example-8cac3472"></a> 
+    <p>Here is the output of <code>wasm-objdump --headers</code> on a Wasm binary that has embedded DWARF debug info:</p>
+<pre>example.wasm:	file format wasm 0x1
+
+Sections:
+
+     Type start=0x0000000a end=0x00000078 (size=0x0000006e) count: 16
+   Import start=0x0000007a end=0x00000092 (size=0x00000018) count: 1
+ Function start=0x00000094 end=0x000000f1 (size=0x0000005d) count: 92
+    Table start=0x000000f3 end=0x000000f8 (size=0x00000005) count: 1
+   Memory start=0x000000fa end=0x000000fd (size=0x00000003) count: 1
+   Global start=0x000000ff end=0x00000118 (size=0x00000019) count: 3
+   Export start=0x0000011b end=0x00000237 (size=0x0000011c) count: 14
+     Elem start=0x00000239 end=0x0000024e (size=0x00000015) count: 1
+     Code start=0x00000252 end=0x0000d303 (size=0x0000d0b1) count: 92
+     Data start=0x0000d306 end=0x0000dab0 (size=0x000007aa) count: 3
+   Custom start=0x0000dab4 end=0x00076c13 (size=0x0006915f) ".debug_info"
+   Custom start=0x00076c15 end=0x00076c3f (size=0x0000002a) ".debug_macinfo"
+   Custom start=0x00076c42 end=0x00079962 (size=0x00002d20) ".debug_loc"
+   Custom start=0x00079966 end=0x0008a7b6 (size=0x00010e50) ".debug_pubtypes"
+   Custom start=0x0008a7ba end=0x000b8408 (size=0x0002dc4e) ".debug_ranges"
+   Custom start=0x000b840b end=0x000baa7e (size=0x00002673) ".debug_abbrev"
+   Custom start=0x000baa82 end=0x00102786 (size=0x00047d04) ".debug_line"
+   Custom start=0x0010278a end=0x00194e5a (size=0x000926d0) ".debug_str"
+   Custom start=0x00194e5e end=0x001b5118 (size=0x000202ba) ".debug_pubnames"
+</pre>
+   </div>
+   <h3 class="heading settled" data-level="1.2" id="external-DWARF"><span class="secno">1.2. </span><span class="content">External DWARF File</span><a class="self-link" href="#external-DWARF"></a></h3>
+   <p class="note" role="note"><span>Note:</span> Existing external DWARF debug info schemes have typically been designed for reducing the amount of debug info that a linker must process and relocate (see "Appendix F: Split DWARF Object Files" in <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>). On the other hand, the motivation for external DWARF files with WebAssembly is to reduce the size of the WebAssembly file to speed up network transfers. If a WebAssembly file is served over HTTP and its DWARF debug info is not needed, then the WebAssembly file can be downloaded more quickly if the DWARF is external.</p>
+   <p><em>TODO: is this the custom section name we want? Do we want it to always be a URL? Always absolute? If relative, relative to what? Do we want to allow file paths?</em></p>
+   <p>A WebAssembly file that has external DWARF contains a custom section named "external_DWARF". The contents of the custom section contains a UTF-8 encoded URL string that points to the external DWARF file or a UTF-8 encoded path string that points to the external DWARF file on the filesystem.</p>
+<pre>external_DWARF ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
+
+ed_data        ::= n:<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-name">name</a> ed_field+                  (if n = "external_DWARF")
+
+ed_field       ::= ed_field_kind ed_field_value
+
+ed_field_kind  ::= 0 ;; URL
+                 | 1 ;; File path
+
+ed_field_value ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
+</pre>
+   <p>If <code>ed_field_kind</code> is <code>0</code>, then the <code>ed_field_value</code> UTF-8 string must be a URL pointing to the external DWARF file. If <code>ed_field_kind</code> is <code>1</code>, then the <code>ed_field_value</code> UTF-8 string must be a file path pointing to the external DWARF file. If there are multiple <code>ed_field</code>s, a DWARF consumer may choose any of them.</p>
+   <p class="note" role="note"><span>Note:</span> Being explicit about whether the external DWARF file is referenced by URL or by file path simplifies the job of getting the external DWARF file for DWARF consumers. Something that has plagued the source map tooling community has been inconsistent use of URLs vs file paths in different parts of the pipeline and tools that always assume one or the other.</p>
+   <p class="note" role="note"><span>Note:</span> Allowing multiple <code>ed_field</code>s allows tools to specify both a file path for local development and URL for development on a server. A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL, even if these ultimately point to the same external DWARF file.</p>
+   <p>The external DWARF file pointed to by an <code>ed_field</code> must be a WebAssembly file with <a href="#embedding-DWARF">embedded DWARF debug info</a>. A DWARF consumer should ignore any non-DWARF WebAssembly sections in this file.</p>
+   <p><em>TODO: should we allow pointing to an external DWARF file that does not have embedded DWARF, but instead points to another external DWARF file? If so, we should mention something about allowing consumer implementations to enforce their own arbitrary max depth, and also say something about cycles.</em></p>
+   <p><em>TODO: should we allow heterogeneous embedded and external DWARF? Eg, have debug_line embedded, but debug_info external?</em></p>
+   <h2 class="heading settled" data-level="2" id="webassembly-code"><span class="secno">2. </span><span class="content">Consuming and Generating DWARF for WebAssembly Code</span><a class="self-link" href="#webassembly-code"></a></h2>
+   <p class="note" role="note"><span>Note:</span> Some DWARF constructs don’t map one-to-one onto WebAssembly constructs. We strive to enumerate and resolve any ambiguities here.</p>
+   <h3 class="heading settled" data-level="2.1" id="pc"><span class="secno">2.1. </span><span class="content">Code Addresses</span><a class="self-link" href="#pc"></a></h3>
+   <p class="note" role="note"><span>Note:</span> DWARF associates various bits of debug info with particular locations in the program via its code address (instruction pointer or PC). However, WebAssembly’s linear memory address space does not contain WebAssembly instructions.</p>
+   <p>Wherever a code address (see 2.17 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) is used in DWARF for WebAssembly, it must be the offset of an instruction relative within the <code>Code</code> section of the WebAssembly file. The DWARF is considered malformed if a PC offset is between instruction boundaries within the <code>Code</code> section.</p>
+   <p><em>TODO: have we considered using i th instruction instead of offsets? This would result in smaller numbers that would encode as smaller LEB128s, and might be easier for consumers and generators. If we did consider that and don’t want it, it would be good to have a note here describing why we didn’t choose that alternative design.</em></p>
+   <div class="example no-marker" id="example-654f4982">
+    <a class="self-link" href="#example-654f4982"></a>
+    <div class="marker">EXAMPLE: .debug_line Instruction Pointers</div>
+     The <code>.debug_line</code> DWARF section maps instruction pointers to source locations. With WebAssembly, the <code>.debug_line</code> section maps <code>Code</code> section-relative instruction offsets to source locations. 
+   </div>
+   <div class="example no-marker" id="example-fe6dbcca">
+    <a class="self-link" href="#example-fe6dbcca"></a>
+    <div class="marker">EXAMPLE: DW_AT_* Attributes</div>
+     For entities with a single associated code address, DWARF uses the <code>DW_AT_low_pc</code> attribute to specify the associated code address value. For WebAssembly, the <code>DW_AT_low_pc</code>'s value is a <code>Code</code> section-relative instruction offset. 
+    <p>For entities with a single contiguous range of code, DWARF uses a pair of <code>DW_AT_low_pc</code> and <code>DW_AT_high_pc</code> attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are <code>Code</code> section-relative instruction offsets.</p>
+   </div>
+   <h3 class="heading settled" data-level="2.2" id="DWARF-expressions-and-location-descriptions"><span class="secno">2.2. </span><span class="content">DWARF Expressions and Location Descriptions</span><a class="self-link" href="#DWARF-expressions-and-location-descriptions"></a></h3>
+   <div class="note" role="note">
+     Note: To enable the recovery of the values of variables, parameters, statics, etc... of a debuggee program at runtime, DWARF has <em>location descriptions</em> (see 2.6 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>). There are four kinds of base, non-composite location description: 
+    <ol>
+     <li data-md="">
+      <p>Empty location descriptions (see 2.6.1.1.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used for optimized-away variables, or data that is otherwise unavailable.</p>
+     <li data-md="">
+      <p>Memory location descriptions (see 2.6.1.1.2 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value is located at some address in memory.</p>
+     <li data-md="">
+      <p>Register location descriptions (see 2.6.1.1.3 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value is located in a register.</p>
+     <li data-md="">
+      <p>Implicit location descriptions (see 2.6.1.1.4 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value does not have any runtime representation, but has a known value anyways.</p>
+    </ol>
+    <p>Each of these location descriptions are applicable to values in WebAssembly, and may be used as they normally are, except for the third: register location descriptions. WebAssembly does not have registers per se. Instead, it has three distinct kinds of virtual registers (globals, locals, and the operand stack) and may use up to 2<sup>32</sup> - 1 instances of each virtual register.</p>
+   </div>
+   <p>When a program object’s value is stored in a WebAssembly local, global, or on the operand stack it must be encoded as an offset from a well-known register number with the <code>DW_OP_breg<sub>n</sub></code> DWARF expression operation (see 2.5.1.2 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>).</p>
    <table class="index">
-    <caption>WebAssembly Location</caption>
+    <caption>Summary of encoding WebAssembly-specific constructs as DWARF registers and offsets</caption>
     <thead>
      <tr>
-      <th>Type
-      <th>Description
-      <th>Second Parameter
+      <th>DWARF Register Number
+      <th>WebAssembly Construct
+      <th>Meaning of offset i
     <tbody>
      <tr>
       <td>1
-      <td>Local or Argument
-      <td>The index of a WebAssembly function  local/parameter
+      <td>Local
+      <td>The i<sup>th</sup> local of the function.
      <tr>
       <td>2
       <td>Global
-      <td>The index of a WebAssembly module global
+      <td>The i<sup>th</sup> global of the module.
      <tr>
       <td>3
-      <td>Operand Stack Item
-      <td>The depth of the item (0 - points the bottom of the stack)
+      <td>Operand Stack
+      <td>The i<sup>th</sup> item on the operand stack.
    </table>
-   <h2 class="heading settled" data-level="3" id="types"><span class="secno">3. </span><span class="content">Types information</span><a class="self-link" href="#types"></a></h2>
-   <p>The <a data-link-type="biblio" href="#biblio-dwarf-spec">[dwarf-spec]</a> has the ability to store types information, e.g. in the <code>.debug_pubtypes</code> or <code>.debug_info</code> sections, that can be used by a debugger to display or pretty print more complex values <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#types">ᴿtypes</a>. The type information can be used by a debugger (or its language server) to properly calculate and execute an expression provided by a user.</p>
-   <p>See also <a href="#debug_info_stucture">§2.2.1 .debug_info structures information</a>.</p>
-   <h2 class="heading settled" data-level="4" id="tools"><span class="secno">4. </span><span class="content">Usage by tools</span><a class="self-link" href="#tools"></a></h2>
-   <p>Tools, other than a debugger, can consume and mutate the DWARF section information. As a general rule, a tool has to have knowledge about debug information associated with WASM binary file. The relocation sections (see <a data-link-type="biblio" href="#biblio-wasm-linking">[wasm-linking]</a>) may assist with changing the structure of the code or data section, e.g. in case if some function where removed <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#fast-to-manipulate">ᴿfast-to-manipulate</a>. However, if a function body itself was mutated, a DWARF information needs to be updated or removed.</p>
-   <p>The proposed above DWARF extensions for WebAssembly are intended to be used by the specialized WebAssembly debuggers or to be transformed into DWARF format that is used in native debuggers.</p>
-   <p>See also <a data-link-type="biblio" href="#biblio-wasm-dwarf-flow">[wasm-dwarf-flow]</a>.</p>
-   <h3 class="heading settled" data-level="4.1" id="source-maps"><span class="secno">4.1. </span><span class="content">Conversion to source maps</span><a class="self-link" href="#source-maps"></a></h3>
-   <p>At this moment web browsers can use source map to map generated code to original sources. The source maps where created for JavaScript usage, however it is possible to use these for the WebAssembly modules.</p>
-   <p>The wasm source maps <a data-link-type="biblio" href="#biblio-source-maps">[source-maps]</a> can be generated based on the .debug_line section information <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#locations">ᴿlocations</a>. The <code>.debug_line</code> sections, when decoded, allows producing the mappings of wasm file bytecode offsets to the original source locations.</p>
-   <p>The source file names can be specified in the relative or absolute form. The web platform solutions prefer original sources be provided as text embedded into source maps or published relative to the source map file.</p>
-   <p>The DWARF sections can be discarded <a href="https://fitzgen.github.io/wasm-debugging-capabilities/#separable-from-wasm">ᴿseparable-from-wasm</a>.</p>
-   <p class="note" role="note"><span>Note:</span> It is possible to translate entire DWARF information -- there is a pilot at <a data-link-type="biblio" href="#biblio-x-scopes-pilot">[x-scopes-pilot]</a>. That allows debugger vendors to experiment and verify if all needed information is present.</p>
-   <h3 class="heading settled" data-level="4.2" id="wasm-debugger"><span class="secno">4.2. </span><span class="content">Use in WebAssembly debuggers</span><a class="self-link" href="#wasm-debugger"></a></h3>
-   <p>The following functionality is expected to be implemented in a specialized WebAssembly debugger:</p>
-   <ul>
-    <li data-md="">
-     <p>Read and parse DWARF data</p>
-    <li data-md="">
-     <p>Evaluate extended DWARF expressions to locate data</p>
-    <li data-md="">
-     <p>Use type info during formatting of data values</p>
-   </ul>
-   <h3 class="heading settled" data-level="4.3" id="aot-jit"><span class="secno">4.3. </span><span class="content">Use in AOT or JIT compilers</span><a class="self-link" href="#aot-jit"></a></h3>
-   <p>It is not trivial to adapt native debuggers to support the WebAssembly target. Though native debuggers have a good support for DWARF.</p>
-   <p>The following functionality is expected to be performed by WebAssembly to native code compilers:</p>
-   <ul>
-    <li data-md="">
-     <p>Read and parser WebAssembly DWARF data</p>
-    <li data-md="">
-     <p>Transform during compilation:</p>
-     <ul>
-      <li data-md="">
-       <p>WebAssembly bytecode offsets to native code instruction addresses</p>
-      <li data-md="">
-       <p>Translate extended DWARF expressions into DWARF expression operands that use native registers and memory</p>
-     </ul>
-    <li data-md="">
-     <p>Serialize and package transformed DWARF data along with the compiled code</p>
-   </ul>
+   <div class="note" role="note">
+     Note: An alternative approach to encoding locals, globals, and the operand stack would be to pack them into DWARF registers directly. If there are L locals, and G globals, then DWARF registers 0 &lt;= g &lt; G would reference each global, DWARF registers G &lt;= l &lt; G+L would reference each local, and DWARF registers s >= G+L would reference values on the operand stack. <em>TODO: what are the downsides of this approach again? Why aren’t we doing this? Should explain that here.</em> 
+    <p>Another alternative approach would be to leverage DWARF’s vendor extensibilty (see 7.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. We would define <code>DW_OP_wasm_local</code>, <code>DW_OP_wasm_global</code>, and <code>DW_OP_wasm_operand_stack</code> operations that each took a ULEB128-encoded operand. <em>TODO: why aren’t we doing this? Should enumerate the downsides and explain why here.</em></p>
+   </div>
+   <h4 class="heading settled" data-level="2.2.1" id="location-descriptions-locals"><span class="secno">2.2.1. </span><span class="content">Locals</span><a class="self-link" href="#location-descriptions-locals"></a></h4>
+   <p>If a value is located in the currently executing function’s i<sup>th</sup> local, then its DWARF register location is register 1 offset i, where 0 &lt;= i &lt; 2<sup>32</sup>.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_breg1</code> operation with i as its SLEB128-encoded operand.</p>
+   <h4 class="heading settled" data-level="2.2.2" id="location-descriptions-globals"><span class="secno">2.2.2. </span><span class="content">Global</span><a class="self-link" href="#location-descriptions-globals"></a></h4>
+   <p>If a value is located in the i<sup>th</sup> global, then its DWARF register location is register 2 offset i, where 0 &lt;= i &lt; 2<sup>32</sup>.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_breg2</code> operation with i as its SLEB128-encoded operand.</p>
+   <h4 class="heading settled" data-level="2.2.3" id="location-descriptions-operand-stack"><span class="secno">2.2.3. </span><span class="content">Operand Stack</span><a class="self-link" href="#location-descriptions-operand-stack"></a></h4>
+   <p>If a value is located in the i<sup>th</sup> entry on the operand stack, then its DWARF register location is register 2 offset i, where 0 &lt;= i &lt; length(operand stack). i = 0 is the bottom of the operand stack.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_breg3</code> operation with i as its SLEB128-encoded  operand.</p>
+   <p class="note" role="note"><span>Note:</span> Using i = 0 as the bottom of the operand stack means that location descriptions will not need to be updated as frequently as if i = 0 were the top of the operand stack, since Wasm instructions are constantly pushing to and popping from the operand stack.</p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -1668,19 +1658,8 @@ Parts of this work may be from another specification document.  If so, those par
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
-   <dt id="biblio-dwarf-spec">[DWARF-SPEC]
-   <dd><a href="http://www.dwarfstd.org/doc/DWARF5.pdf">DWARF Debugging Information Format. Version 5</a>. URL: <a href="http://www.dwarfstd.org/doc/DWARF5.pdf">http://www.dwarfstd.org/doc/DWARF5.pdf</a>
+   <dt id="biblio-dwarf">[DWARF]
+   <dd><a href="http://www.DWARFstd.org/doc/DWARF5.pdf">DWARF Debugging Information Format. Version 5</a>. URL: <a href="http://www.DWARFstd.org/doc/DWARF5.pdf">http://www.DWARFstd.org/doc/DWARF5.pdf</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
-   <dt id="biblio-source-maps">[SOURCE-MAPS]
-   <dd><a href="https://github.com/WebAssembly/design/pull/1051">Source maps applied to wasm binaries</a>. URL: <a href="https://github.com/WebAssembly/design/pull/1051">https://github.com/WebAssembly/design/pull/1051</a>
-   <dt id="biblio-wasm-linking">[WASM-LINKING]
-   <dd><a href="https://github.com/WebAssembly/tool-conventions/blob/master/Linking.md">WebAssembly Object File Linking</a>. URL: <a href="https://github.com/WebAssembly/tool-conventions/blob/master/Linking.md">https://github.com/WebAssembly/tool-conventions/blob/master/Linking.md</a>
-  </dl>
-  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
-  <dl>
-   <dt id="biblio-wasm-dwarf-flow">[WASM-DWARF-FLOW]
-   <dd><a href="https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/">WebAssembly DWARF information flow overview</a>. URL: <a href="https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/">https://docs.google.com/drawings/d/17WDtbC4qIzUvdSHsRxw6c4kPcUhTlKJfRDmhywr9Pmo/</a>
-   <dt id="biblio-x-scopes-pilot">[X-SCOPES-PILOT]
-   <dd><a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">Experimental `x-scopes` source maps extension</a>. URL: <a href="https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159">https://gist.github.com/yurydelendik/802f36983d50cedb05f984d784dc5159</a>
   </dl>
