@@ -199,3 +199,21 @@ If a value is located in the i<sup>th</sup> entry on the operand stack, then its
 The value's location description must be encoded as a `DW_OP_WASM_location 0x02` operation with i as its ULEB128-encoded  operand.
 
 Note: Using i = 0 as the bottom of the operand stack means that location descriptions will not need to be updated as frequently as if i = 0 were the top of the operand stack, since Wasm instructions are constantly pushing to and popping from the operand stack.
+
+## Using with AOT/JIT compilers ## {#aot-jit-compilers}
+
+The DWARF for WebAssembly is not usable as is with the native debuggers such as LLDB or GDB. This debug info needs to be transformed into native DWARF when a native module is generated. The WebAssembly to native code compilers needs to perform the following operations:
+
+  * To transform WebAssembly code and data address space to native one (32- or 64-bit). That might include a WebAssembly location to multiple native addresses ranges transformation for code instructions.
+
+  * To transform DWARF expressions that contain WebAssembly-specific extension operators, as described in the [[#DWARF-expressions-and-location-descriptions]], with a proper native register or memory location.
+
+<div class="example">
+
+Here is the example of a transformation of a WebAssembly file and a linked external DWARF file into a native executable module, which is possible to debug using native debuggers.
+
+<div class="figure">
+  <p><a href="images/aot-dwarf.svg"><img src="images/aot-dwarf.png" alt="Example of AOT Compiler DWARF Transformation Process"></a></p>
+  <p class="caption">Example of AOT Compiler DWARF Transformation Process</p>
+</div>
+</div>
