@@ -111,7 +111,7 @@ The `.debug_line` DWARF section maps instruction pointers to source locations. W
 <div class="example" heading="DW_AT_* Attributes">
 For entities with a single associated code address, DWARF uses the `DW_AT_low_pc` attribute to specify the associated code address value. For WebAssembly, the `DW_AT_low_pc`'s value is a `Code` section-relative instruction offset.
 
-For entities with a single contiguous range of code, DWARF uses a pair of `DW_AT_low_pc` and `DW_AT_high_pc` attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are `Code` section-relative instruction offsets.
+For entities with a single contiguous range of code, DWARF uses a pair of `DW_AT_low_pc` and `DW_AT_high_pc` attributes to specify the associated contiguous range of code address values. For WebAssembly, these attributes are `Code` section-relative instruction offsets.
 
 For entities with multiple ranges of code, DWARF uses the `DW_AT_ranges` attribute, which refers to the array located at the `.debug_ranges` section.
 </div>
@@ -176,7 +176,7 @@ wasm-operand-stack := 0x02 i:uleb128
   </tbody>
 </table>
 
-Note: This approach leverages DWARF's vendor extensibility (see 7.1 of [[DWARF]]) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of need operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.
+Note: This approach leverages DWARF's vendor extensibility (see 7.1 of [[DWARF]]) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of needed operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.
 
 Note: The WebAssembly does not impose a limit of the maximum amount of local or globals. It will be a challenge to agree on an encoding scheme to represent WebAssembly locations listed above as registers, as well as documenting this scheme in the DWARF standard.
 

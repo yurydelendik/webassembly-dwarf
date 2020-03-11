@@ -1485,7 +1485,7 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
     <a class="self-link" href="#example-962b47d0"></a>
     <div class="marker">EXAMPLE: DW_AT_* Attributes</div>
      For entities with a single associated code address, DWARF uses the <code>DW_AT_low_pc</code> attribute to specify the associated code address value. For WebAssembly, the <code>DW_AT_low_pc</code>'s value is a <code>Code</code> section-relative instruction offset. 
-    <p>For entities with a single contiguous range of code, DWARF uses a pair of <code>DW_AT_low_pc</code> and <code>DW_AT_high_pc</code> attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are <code>Code</code> section-relative instruction offsets.</p>
+    <p>For entities with a single contiguous range of code, DWARF uses a pair of <code>DW_AT_low_pc</code> and <code>DW_AT_high_pc</code> attributes to specify the associated contiguous range of code address values. For WebAssembly, these attributes are <code>Code</code> section-relative instruction offsets.</p>
     <p>For entities with multiple ranges of code, DWARF uses the <code>DW_AT_ranges</code> attribute, which refers to the array located at the <code>.debug_ranges</code> section.</p>
    </div>
    <h3 class="heading settled" data-level="2.2" id="DWARF-expressions-and-location-descriptions"><span class="secno">2.2. </span><span class="content">DWARF Expressions and Location Descriptions</span><a class="self-link" href="#DWARF-expressions-and-location-descriptions"></a></h3>
