@@ -111,7 +111,7 @@ The `.debug_line` DWARF section maps instruction pointers to source locations. W
 <div class="example" heading="DW_AT_* Attributes">
 For entities with a single associated code address, DWARF uses the `DW_AT_low_pc` attribute to specify the associated code address value. For WebAssembly, the `DW_AT_low_pc`'s value is a `Code` section-relative instruction offset.
 
-For entities with a single contiguous range of code, DWARF uses a pair of `DW_AT_low_pc` and `DW_AT_high_pc` attributes to specify the associated contiguous range of code address values. For WebAassembly, these attributes are `Code` section-relative instruction offsets.
+For entities with a single contiguous range of code, DWARF uses a pair of `DW_AT_low_pc` and `DW_AT_high_pc` attributes to specify the associated contiguous range of code address values. For WebAssembly, these attributes are `Code` section-relative instruction offsets.
 
 For entities with multiple ranges of code, DWARF uses the `DW_AT_ranges` attribute, which refers to the array located at the `.debug_ranges` section.
 </div>
