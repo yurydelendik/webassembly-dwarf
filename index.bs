@@ -151,7 +151,8 @@ wasm-op := wasm-local | wasm-global | wasm-operand-stack
 
 wasm-local := 0x00 i:uleb128
 
-wasm-global := 0x01 i:uleb128
+wasm-global := 0x01 i:uleb128 |
+               0x03 i:u32
 
 wasm-operand-stack := 0x02 i:uleb128
 </pre>
@@ -160,7 +161,7 @@ wasm-operand-stack := 0x02 i:uleb128
   <caption>Summary of encoding WebAssembly-specific constructs</caption>
   <thead>
     <tr>
-      <th>DWARF Register Number</th><th>WebAssembly Construct</th><th>Meaning of the argument</th>
+      <th>DWARF Location Index</th><th>WebAssembly Construct</th><th>Meaning of the argument</th>
     </tr>
   </thead>
   <tbody>
@@ -168,7 +169,7 @@ wasm-operand-stack := 0x02 i:uleb128
       <td>0</td><td>Local</td><td>The i<sup>th</sup> local of the function.</td>
     </tr>
     <tr>
-      <td>1</td><td>Global</td><td>The i<sup>th</sup> global of the module.</td>
+      <td>1 or 3</td><td>Global</td><td>The i<sup>th</sup> global of the module.</td>
     </tr>
     <tr>
       <td>2</td><td>Operand Stack</td><td>The i<sup>th</sup> item on the operand stack.</td>
