@@ -1029,7 +1029,7 @@ Possible extra rowspan handling
 		}
 	/* } */
 
-	@supports (display:grid) {
+	@supports (display:grid) and (display:contents) {
 		/* Use #toc over .toc to override non-@supports rules. */
 		#toc {
 			display: grid;
@@ -1167,6 +1167,18 @@ Possible extra rowspan handling
 		margin-left: auto;
 		margin-right: auto;
 	}
+	.overlarge {
+		/* Magic to create good table positioning:
+		   "content column" is 50ems wide at max; less on smaller screens.
+		   Extra space (after ToC + content) is empty on the right.
+
+		   1. When table < content column, centers table in column.
+		   2. When content < table < available, left-aligns.
+		   3. When table > available, fills available + scroll bar.
+		*/ 
+		display: grid;
+		grid-template-columns: minmax(0, 50em);
+	}
 	.overlarge > table {
 		/* limit preferred width of table */
 		max-width: 50em;
@@ -1176,7 +1188,6 @@ Possible extra rowspan handling
 
 	@media (min-width: 55em) {
 		.overlarge {
-			margin-left: calc(13px + 26.5rem - 50vw);
 			margin-right: calc(13px + 26.5rem - 50vw);
 			max-width: none;
 		}
@@ -1184,14 +1195,12 @@ Possible extra rowspan handling
 	@media screen and (min-width: 78em) {
 		body:not(.toc-inline) .overlarge {
 			/* 30.5em body padding 50em content area */
-			margin-left: calc(40em - 50vw) !important;
 			margin-right: calc(40em - 50vw) !important;
 		}
 	}
 	@media screen and (min-width: 90em) {
 		body:not(.toc-inline) .overlarge {
 			/* 4em html margin 30.5em body padding 50em content area */
-			margin-left: 0 !important;
 			margin-right: calc(84.5em - 100vw) !important;
 		}
 	}
@@ -1212,98 +1221,13 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 3678d496235a6f1964fc14f56861db11f24476c4" name="generator">
-  <meta content="5ea16e1ebf69742dfb2e529fb38dafe6512b36f7" name="document-revision">
+  <meta content="Bikeshed version b76f9052, updated Mon Apr 13 16:17:21 2020 -0700" name="generator">
+  <meta content="bcc44c037c191e752f5787faa7cb8bd318c1412b" name="document-revision">
 <style>
 p, body {
     hyphens: none;
 }
 </style>
-<style>/* style-md-lists */
-
-/* This is a weird hack for me not yet following the commonmark spec
-   regarding paragraph and lists. */
-[data-md] > :first-child {
-    margin-top: 0;
-}
-[data-md] > :last-child {
-    margin-bottom: 0;
-}</style>
-<style>/* style-counters */
-
-body {
-    counter-reset: example figure issue;
-}
-.issue {
-    counter-increment: issue;
-}
-.issue:not(.no-marker)::before {
-    content: "Issue " counter(issue);
-}
-
-.example {
-    counter-increment: example;
-}
-.example:not(.no-marker)::before {
-    content: "Example " counter(example);
-}
-.invalid.example:not(.no-marker)::before,
-.illegal.example:not(.no-marker)::before {
-    content: "Invalid Example" counter(example);
-}
-
-figcaption {
-    counter-increment: figure;
-}
-figcaption:not(.no-marker)::before {
-    content: "Figure " counter(figure) " ";
-}</style>
-<style>/* style-selflinks */
-
-.heading, .issue, .note, .example, li, dt {
-    position: relative;
-}
-a.self-link {
-    position: absolute;
-    top: 0;
-    left: calc(-1 * (3.5rem - 26px));
-    width: calc(3.5rem - 26px);
-    height: 2em;
-    text-align: center;
-    border: none;
-    transition: opacity .2s;
-    opacity: .5;
-}
-a.self-link:hover {
-    opacity: 1;
-}
-.heading > a.self-link {
-    font-size: 83%;
-}
-li > a.self-link {
-    left: calc(-1 * (3.5rem - 26px) - 2em);
-}
-dfn > a.self-link {
-    top: auto;
-    left: auto;
-    opacity: 0;
-    width: 1.5em;
-    height: 1.5em;
-    background: gray;
-    color: white;
-    font-style: normal;
-    transition: opacity .2s, background-color .2s, color .2s;
-}
-dfn:hover > a.self-link {
-    opacity: 1;
-}
-dfn > a.self-link:hover {
-    color: black;
-}
-
-a.self-link::before            { content: "¶"; }
-.heading > a.self-link::before { content: "§"; }
-dfn > a.self-link::before      { content: "#"; }</style>
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1366,11 +1290,96 @@ pre .property::before, pre .property::after {
 [data-link-type=biblio] {
     white-space: pre;
 }</style>
+<style>/* style-counters */
+
+body {
+    counter-reset: example figure issue;
+}
+.issue {
+    counter-increment: issue;
+}
+.issue:not(.no-marker)::before {
+    content: "Issue " counter(issue);
+}
+
+.example {
+    counter-increment: example;
+}
+.example:not(.no-marker)::before {
+    content: "Example " counter(example);
+}
+.invalid.example:not(.no-marker)::before,
+.illegal.example:not(.no-marker)::before {
+    content: "Invalid Example" counter(example);
+}
+
+figcaption {
+    counter-increment: figure;
+}
+figcaption:not(.no-marker)::before {
+    content: "Figure " counter(figure) " ";
+}</style>
+<style>/* style-md-lists */
+
+/* This is a weird hack for me not yet following the commonmark spec
+   regarding paragraph and lists. */
+[data-md] > :first-child {
+    margin-top: 0;
+}
+[data-md] > :last-child {
+    margin-bottom: 0;
+}</style>
+<style>/* style-selflinks */
+
+.heading, .issue, .note, .example, li, dt {
+    position: relative;
+}
+a.self-link {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (3.5rem - 26px));
+    width: calc(3.5rem - 26px);
+    height: 2em;
+    text-align: center;
+    border: none;
+    transition: opacity .2s;
+    opacity: .5;
+}
+a.self-link:hover {
+    opacity: 1;
+}
+.heading > a.self-link {
+    font-size: 83%;
+}
+li > a.self-link {
+    left: calc(-1 * (3.5rem - 26px) - 2em);
+}
+dfn > a.self-link {
+    top: auto;
+    left: auto;
+    opacity: 0;
+    width: 1.5em;
+    height: 1.5em;
+    background: gray;
+    color: white;
+    font-style: normal;
+    transition: opacity .2s, background-color .2s, color .2s;
+}
+dfn:hover > a.self-link {
+    opacity: 1;
+}
+dfn > a.self-link:hover {
+    color: black;
+}
+
+a.self-link::before            { content: "¶"; }
+.heading > a.self-link::before { content: "§"; }
+dfn > a.self-link::before      { content: "#"; }</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2019-01-16">16 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-04-17">17 April 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1382,7 +1391,7 @@ pre .property::before, pre .property::after {
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 16 January 2019,
+In addition, as of 17 April 2020,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1481,8 +1490,8 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
     <div class="marker">EXAMPLE: .debug_line Instruction Pointers</div>
      The <code>.debug_line</code> DWARF section maps instruction pointers to source locations. With WebAssembly, the <code>.debug_line</code> section maps <code>Code</code> section-relative instruction offsets to source locations. 
    </div>
-   <div class="example no-marker" id="example-962b47d0">
-    <a class="self-link" href="#example-962b47d0"></a>
+   <div class="example no-marker" id="example-9e39def8">
+    <a class="self-link" href="#example-9e39def8"></a>
     <div class="marker">EXAMPLE: DW_AT_* Attributes</div>
      For entities with a single associated code address, DWARF uses the <code>DW_AT_low_pc</code> attribute to specify the associated code address value. For WebAssembly, the <code>DW_AT_low_pc</code>'s value is a <code>Code</code> section-relative instruction offset. 
     <p>For entities with a single contiguous range of code, DWARF uses a pair of <code>DW_AT_low_pc</code> and <code>DW_AT_high_pc</code> attributes to specify the associated contiguous range of code address values. For WebAssembly, these attributes are <code>Code</code> section-relative instruction offsets.</p>
@@ -1492,13 +1501,13 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
    <div class="note" role="note">
      Note: To enable the recovery of the values of variables, parameters, statics, etc... of a debuggee program at runtime, DWARF has <em>location descriptions</em> (see 2.6 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>). There are four kinds of base, non-composite location description: 
     <ol>
-     <li data-md="">
+     <li data-md>
       <p>Empty location descriptions (see 2.6.1.1.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used for optimized-away variables, or data that is otherwise unavailable.</p>
-     <li data-md="">
+     <li data-md>
       <p>Memory location descriptions (see 2.6.1.1.2 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value is located at some address in memory.</p>
-     <li data-md="">
+     <li data-md>
       <p>Register location descriptions (see 2.6.1.1.3 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value is located in a register.</p>
-     <li data-md="">
+     <li data-md>
       <p>Implicit location descriptions (see 2.6.1.1.4 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) are used when a value does not have any runtime representation, but has a known value anyways.</p>
     </ol>
     <p>Each of these location descriptions are applicable to values in WebAssembly, and may be used as they normally are, except for the third: register location descriptions. WebAssembly does not have registers per se. Instead, it has three distinct kinds of virtual registers (globals, locals, and the operand stack) and may use up to 2<sup>32</sup> - 1 instances of each virtual register.</p>
@@ -1537,7 +1546,7 @@ wasm-operand-stack := 0x02 i:uleb128
       <td>Operand Stack
       <td>The i<sup>th</sup> item on the operand stack.
    </table>
-   <p class="note" role="note"><span>Note:</span> This approach leverages DWARF’s vendor extensibility (see 7.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of need operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.</p>
+   <p class="note" role="note"><span>Note:</span> This approach leverages DWARF’s vendor extensibility (see 7.1 of <a data-link-type="biblio" href="#biblio-dwarf">[DWARF]</a>) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of needed operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.</p>
    <p class="note" role="note"><span>Note:</span> The WebAssembly does not impose a limit of the maximum amount of local or globals. It will be a challenge to agree on an encoding scheme to represent WebAssembly locations listed above as registers, as well as documenting this scheme in the DWARF standard.</p>
    <h4 class="heading settled" data-level="2.2.1" id="location-descriptions-locals"><span class="secno">2.2.1. </span><span class="content">Locals</span><a class="self-link" href="#location-descriptions-locals"></a></h4>
    <p>If a value is located in the currently executing function’s i<sup>th</sup> local.</p>
@@ -1552,10 +1561,10 @@ wasm-operand-stack := 0x02 i:uleb128
    <h3 class="heading settled" data-level="2.3" id="aot-jit-compilers"><span class="secno">2.3. </span><span class="content">Using with AOT/JIT compilers</span><a class="self-link" href="#aot-jit-compilers"></a></h3>
    <p>The DWARF for WebAssembly is not usable as is with the native debuggers such as LLDB or GDB. This debug info needs to be transformed into native DWARF when a native module is generated. The WebAssembly to native code compilers needs to perform the following operations:</p>
    <ul>
-    <li data-md="">
+    <li data-md>
      <p>To transform WebAssembly code and data address space to native one (32- or 64-bit). That might include a WebAssembly location to multiple native addresses ranges transformation for code instructions.</p>
-    <li data-md="">
-     <p>To transform DWARF expressions that contain WebAssembly-specific extension operators, as described in the <a href="#DWARF-expressions-and-location-descriptions">§2.2 DWARF Expressions and Location Descriptions</a>, with a proper native register or memory location.</p>
+    <li data-md>
+     <p>To transform DWARF expressions that contain WebAssembly-specific extension operators, as described in the <a href="#DWARF-expressions-and-location-descriptions">§ 2.2 DWARF Expressions and Location Descriptions</a>, with a proper native register or memory location.</p>
    </ul>
    <div class="example" id="example-d4d608ff">
     <a class="self-link" href="#example-d4d608ff"></a> 
