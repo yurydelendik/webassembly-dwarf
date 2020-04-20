@@ -1222,7 +1222,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version b76f9052, updated Mon Apr 13 16:17:21 2020 -0700" name="generator">
-  <meta content="bcc44c037c191e752f5787faa7cb8bd318c1412b" name="document-revision">
+  <meta content="a7e7b5dccbee9563d41ab057e837c2e4156461ce" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1379,7 +1379,7 @@ dfn > a.self-link::before      { content: "#"; }</style>
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-04-17">17 April 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-04-20">20 April 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1391,7 +1391,7 @@ dfn > a.self-link::before      { content: "#"; }</style>
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 17 April 2020,
+In addition, as of 20 April 2020,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1515,7 +1515,7 @@ ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/
    <p>When a program object’s value is stored in a WebAssembly local, global, or on the operand stack it must be encoded as an extended DWARF operation. The meanings of the existing DWARF location does not match definitions of local, global, or operands stack. The proposed format for the extension is:</p>
 <pre>wasm-ext := DW_OP_WASM_location wasm-op
 
-DW_OP_WASM_location := 0xEB ;; available DWARF extension code
+DW_OP_WASM_location := 0xED ;; available DWARF extension code
 
 wasm-op := wasm-local | wasm-global | wasm-operand-stack
 

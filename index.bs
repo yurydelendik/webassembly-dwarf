@@ -145,7 +145,7 @@ When a program object's value is stored in a WebAssembly local, global, or on th
 <pre>
 wasm-ext := DW_OP_WASM_location wasm-op
 
-DW_OP_WASM_location := 0xEB ;; available DWARF extension code
+DW_OP_WASM_location := 0xED ;; available DWARF extension code
 
 wasm-op := wasm-local | wasm-global | wasm-operand-stack
 
