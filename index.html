@@ -1175,7 +1175,7 @@ Possible extra rowspan handling
 		   1. When table < content column, centers table in column.
 		   2. When content < table < available, left-aligns.
 		   3. When table > available, fills available + scroll bar.
-		*/ 
+		*/
 		display: grid;
 		grid-template-columns: minmax(0, 50em);
 	}
@@ -1221,8 +1221,8 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version b76f9052, updated Mon Apr 13 16:17:21 2020 -0700" name="generator">
-  <meta content="08231b10f456750552c5997a305e4fc21153cec7" name="document-revision">
+  <meta content="Bikeshed version c05ebec3, updated Fri Jul 31 13:58:05 2020 -0700" name="generator">
+  <meta content="685f89e48a8c7b6b689bc949a3b845745c500e24" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1379,7 +1379,7 @@ dfn > a.self-link::before      { content: "#"; }</style>
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">DWARF for WebAssembly</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-04-20">20 April 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-08-06">6 August 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1391,7 +1391,7 @@ dfn > a.self-link::before      { content: "#"; }</style>
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 20 April 2020,
+In addition, as of 6 August 2020,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1473,7 +1473,8 @@ Sections:
    <p class="note" role="note"><span>Note:</span> It is preferable that the URL will be in relative form, relative to the WebAssembly file, to make DWARF debug info relocatable and consumable from an alternative or cached location.</p>
 <pre>external_debug_info ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
 
-ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
+ed_data             ::= n:<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-name">name</a> b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)
+                        (if n = 'external_debug_info' and <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
 </pre>
    <p class="note" role="note"><span>Note:</span> A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL. The <code>ed_data</code> field needs to be decoded according to "file" URI Scheme rules when it needs to be used as a file path, which can be environment specific.</p>
    <p>If the "external_debug_info" section is present, any DWARF debug info WebAssembly sections are ignored. A DWARF producer needs to remove such sections to reduce the size of the WebAssembly file. If more than one valid "external_debug_info" section is present, consumers will use the last one.</p>
