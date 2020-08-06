@@ -81,7 +81,8 @@ Note: It is preferable that the URL will be in relative form, relative to the We
 <pre>
 external_debug_info ::= <a href="https://webassembly.github.io/spec/core/binary/modules.html#binary-section">section<sub>0</sub></a>(ed_data)
 
-ed_data        ::= b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)                      (if <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
+ed_data             ::= n:<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-name">name</a> b∗:<a href="https://webassembly.github.io/spec/core/binary/conventions.html#binary-vec">vec</a>(<a href="https://webassembly.github.io/spec/core/binary/values.html#binary-byte">byte</a>)
+                        (if n = 'external_debug_info' and <a href="https://webassembly.github.io/spec/core/binary/values.html#binary-utf8">utf8</a>(ed_field_value) = b*)
 </pre>
 
 Note: A command line tool might prefer to use file paths, while browser devtools might prefer to use a URL. The `ed_data` field needs to be decoded according to "file" URI Scheme rules when it needs to be used as a file path, which can be environment specific.
