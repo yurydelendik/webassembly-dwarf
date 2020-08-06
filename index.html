@@ -1222,7 +1222,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version b76f9052, updated Mon Apr 13 16:17:21 2020 -0700" name="generator">
-  <meta content="a7e7b5dccbee9563d41ab057e837c2e4156461ce" name="document-revision">
+  <meta content="08231b10f456750552c5997a305e4fc21153cec7" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1521,7 +1521,8 @@ wasm-op := wasm-local | wasm-global | wasm-operand-stack
 
 wasm-local := 0x00 i:uleb128
 
-wasm-global := 0x01 i:uleb128
+wasm-global := 0x01 i:uleb128 |
+               0x03 i:u32
 
 wasm-operand-stack := 0x02 i:uleb128
 </pre>
@@ -1529,7 +1530,7 @@ wasm-operand-stack := 0x02 i:uleb128
     <caption>Summary of encoding WebAssembly-specific constructs</caption>
     <thead>
      <tr>
-      <th>DWARF Register Number
+      <th>DWARF Location Index
       <th>WebAssembly Construct
       <th>Meaning of the argument
     <tbody>
@@ -1538,7 +1539,7 @@ wasm-operand-stack := 0x02 i:uleb128
       <td>Local
       <td>The i<sup>th</sup> local of the function.
      <tr>
-      <td>1
+      <td>1 or 3
       <td>Global
       <td>The i<sup>th</sup> global of the module.
      <tr>
