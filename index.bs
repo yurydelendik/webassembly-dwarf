@@ -178,7 +178,7 @@ wasm-operand-stack := 0x02 i:uleb128
   </tbody>
 </table>
 
-Note: This approach leverages DWARF's vendor extensibility (see 7.1 of [[DWARF]]) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of needed operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific location.
+Note: This approach leverages DWARF's vendor extensibility (see 7.1 of [[DWARF]]) to reserve custom DWARF expression opcodes for WebAssembly-specific location descriptions. The encoding provides the basic set of needed operators. In the future, it is possible to extend this set with a more compact encoding scheme, as well as adding specific DWARF extensions for a set of commonly used WebAssembly-specific locations.
 
 Note: The WebAssembly does not impose a limit of the maximum amount of local or globals. It will be a challenge to agree on an encoding scheme to represent WebAssembly locations listed above as registers, as well as documenting this scheme in the DWARF standard.
 
