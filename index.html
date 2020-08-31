@@ -1222,7 +1222,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version c05ebec3, updated Fri Jul 31 13:58:05 2020 -0700" name="generator">
-  <meta content="9f62ce99f52e4a47ada3043d6868dd2cc4346f1b" name="document-revision">
+  <meta content="ba77c1f084255b08a72cdbdb928777d3d70e2215" name="document-revision">
 <style>
 p, body {
     hyphens: none;
@@ -1555,7 +1555,7 @@ wasm-operand-stack := 0x02 i:uleb128
    <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x00</code> operation with i as its ULEB128-encoded operand.</p>
    <h4 class="heading settled" data-level="2.2.2" id="location-descriptions-globals"><span class="secno">2.2.2. </span><span class="content">Global</span><a class="self-link" href="#location-descriptions-globals"></a></h4>
    <p>If a value is located in the i<sup>th</sup> global.</p>
-   <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x01</code> operation with i as its ULEB128-encoded operand.</p>
+   <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x01</code> operation with i as its ULEB128-encoded operand. Alternatively, the operation encoding <code>DW_OP_WASM_location 0x03</code> with i as its U32-encoded operand is available.</p>
    <h4 class="heading settled" data-level="2.2.3" id="location-descriptions-operand-stack"><span class="secno">2.2.3. </span><span class="content">Operand Stack</span><a class="self-link" href="#location-descriptions-operand-stack"></a></h4>
    <p>If a value is located in the i<sup>th</sup> entry on the operand stack, then its DWARF register location is register 2 offset i, where 0 &lt;= i &lt; length(operand stack). i = 0 is the bottom of the operand stack.</p>
    <p>The value’s location description must be encoded as a <code>DW_OP_WASM_location 0x02</code> operation with i as its ULEB128-encoded  operand.</p>

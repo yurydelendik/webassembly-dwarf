@@ -192,7 +192,7 @@ The value's location description must be encoded as a `DW_OP_WASM_location 0x00`
 
 If a value is located in the i<sup>th</sup> global.
 
-The value's location description must be encoded as a `DW_OP_WASM_location 0x01` operation with i as its ULEB128-encoded operand.
+The value's location description must be encoded as a `DW_OP_WASM_location 0x01` operation with i as its ULEB128-encoded operand. Alternatively, the operation encoding `DW_OP_WASM_location 0x03` with i as its U32-encoded operand is available.
 
 ### Operand Stack ### {#location-descriptions-operand-stack}
 
